@@ -17,6 +17,7 @@ import type {
   PlantType,
   PotStyle,
   PotColor,
+  Garden,
 } from '../models/types';
 import { TIER_PLANT_OPTIONS } from '../models/types';
 import { getFriendHealth } from '../services/healthService';
@@ -44,12 +45,21 @@ const getRandomPotStyle = (): PotStyle => {
 
 interface FriendStore {
   // State
+  gardens: Garden[];
+  currentGardenId: string | null;
   friends: Friend[];
   interactions: Interaction[];
   plantAppearances: Record<string, PlantAppearance>;
 
-  // Friend CRUD
-  addFriend: (name: string, tier: Tier, roles?: FriendRole[]) => Friend;
+  // Garden CRUD
+  createGarden: (name: string, icon?: string, description?: string) => Garden;
+  updateGarden: (id: string, updates: Partial<Omit<Garden, 'id' | 'createdAt'>>) => void;
+  deleteGarden: (id: string) => void;
+  switchGarden: (gardenId: string) => void;
+  getCurrentGarden: () => Garden | null;
+
+  // Friend CRUD (scoped to current garden)
+  addFriend: (name: string, tier: Tier, roles?: FriendRole[]) => Friend | null;
   updateFriend: (id: string, updates: Partial<Friend>) => void;
   removeFriend: (id: string) => void;
   getFriend: (id: string) => Friend | undefined;
@@ -88,25 +98,89 @@ interface FriendStore {
   getFriendsByTier: (tier: Tier) => Friend[];
   getFriendsNeedingAttention: () => Friend[];
   getUpcomingBirthdays: (days?: number) => Friend[];
+  getCurrentGardenFriends: () => Friend[];
 }
 
 export const useFriendStore = create<FriendStore>()(
   persist(
     (set, get) => ({
+      gardens: [],
+      currentGardenId: null,
       friends: [],
       interactions: [],
       plantAppearances: {},
+
+      // ─────────────────────────────────────────────────────────────
+      // GARDEN CRUD
+      // ─────────────────────────────────────────────────────────────
+
+      createGarden: (name, icon = '🏠', description) => {
+        const garden: Garden = {
+          id: generateId(),
+          name,
+          icon,
+          description,
+          createdAt: new Date().toISOString(),
+        };
+
+        set((state) => ({
+          gardens: [...state.gardens, garden],
+          currentGardenId: state.currentGardenId || garden.id,
+        }));
+
+        return garden;
+      },
+
+      updateGarden: (id, updates) => {
+        set((state) => ({
+          gardens: state.gardens.map((g) =>
+            g.id === id ? { ...g, ...updates } : g
+          ),
+        }));
+      },
+
+      deleteGarden: (id) => {
+        const { currentGardenId, gardens } = get();
+        const remainingGardens = gardens.filter((g) => g.id !== id);
+
+        set((state) => ({
+          gardens: remainingGardens,
+          currentGardenId:
+            currentGardenId === id
+              ? remainingGardens[0]?.id || null
+              : currentGardenId,
+          // Remove all friends and interactions from this garden
+          friends: state.friends.filter((f) => f.gardenId !== id),
+          interactions: state.interactions.filter((i) => {
+            const friend = state.friends.find((f) => f.id === i.friendId);
+            return friend?.gardenId !== id;
+          }),
+        }));
+      },
+
+      switchGarden: (gardenId) => {
+        set({ currentGardenId: gardenId });
+      },
+
+      getCurrentGarden: () => {
+        const { gardens, currentGardenId } = get();
+        return gardens.find((g) => g.id === currentGardenId) || null;
+      },
 
       // ─────────────────────────────────────────────────────────────
       // FRIEND CRUD
       // ─────────────────────────────────────────────────────────────
 
       addFriend: (name, tier, roles = []) => {
+        const { currentGardenId } = get();
+        if (!currentGardenId) return null;
+
         const now = new Date().toISOString();
         const id = generateId();
 
         const friend: Friend = {
           id,
+          gardenId: currentGardenId,
           name,
           tier,
           roles,
@@ -251,6 +325,24 @@ export const useFriendStore = create<FriendStore>()(
       // ─────────────────────────────────────────────────────────────
 
       loadDemoData: () => {
+        // Create demo garden if it doesn't exist
+        let demoGarden = get().gardens.find((g) => g.isDemo);
+        if (!demoGarden) {
+          demoGarden = {
+            id: generateId(),
+            name: 'Demo Garden',
+            icon: '🌸',
+            isDemo: true,
+            createdAt: new Date().toISOString(),
+          };
+          set((state) => ({
+            gardens: [...state.gardens, demoGarden!],
+            currentGardenId: demoGarden!.id,
+          }));
+        } else {
+          set({ currentGardenId: demoGarden.id });
+        }
+
         const demoFriends = [
           { name: 'Maya Chen', tier: 1 as Tier, birthday: '1992-03-15' },
           { name: 'James Wilson', tier: 1 as Tier, birthday: '1990-07-22' },
@@ -268,6 +360,7 @@ export const useFriendStore = create<FriendStore>()(
 
         demoFriends.forEach((demo, index) => {
           const friend = get().addFriend(demo.name, demo.tier);
+          if (!friend) return;
 
           // Add birthday if present
           if (demo.birthday) {
@@ -287,7 +380,23 @@ export const useFriendStore = create<FriendStore>()(
       },
 
       clearAllData: () => {
-        set({ friends: [], interactions: [], plantAppearances: {} });
+        const { currentGardenId } = get();
+        if (!currentGardenId) return;
+
+        // Only clear data for current garden
+        set((state) => ({
+          friends: state.friends.filter((f) => f.gardenId !== currentGardenId),
+          interactions: state.interactions.filter((i) => {
+            const friend = state.friends.find((f) => f.id === i.friendId);
+            return friend?.gardenId !== currentGardenId;
+          }),
+          plantAppearances: Object.fromEntries(
+            Object.entries(state.plantAppearances).filter(([friendId]) => {
+              const friend = state.friends.find((f) => f.id === friendId);
+              return friend?.gardenId !== currentGardenId;
+            })
+          ),
+        }));
       },
 
       // ─────────────────────────────────────────────────────────────
@@ -301,8 +410,11 @@ export const useFriendStore = create<FriendStore>()(
       },
 
       getAllFriendsHealth: () => {
-        const { friends, interactions } = get();
-        return friends.map((friend) => getFriendHealth(friend, interactions));
+        const { friends, interactions, currentGardenId } = get();
+        const gardenFriends = currentGardenId
+          ? friends.filter((f) => f.gardenId === currentGardenId)
+          : friends;
+        return gardenFriends.map((friend) => getFriendHealth(friend, interactions));
       },
 
       // ─────────────────────────────────────────────────────────────
@@ -326,28 +438,38 @@ export const useFriendStore = create<FriendStore>()(
       },
 
       // ─────────────────────────────────────────────────────────────
-      // QUERIES
+      // QUERIES (scoped to current garden)
       // ─────────────────────────────────────────────────────────────
 
       getFriendsByTier: (tier) => {
-        return get().friends.filter((f) => f.tier === tier);
+        const { friends, currentGardenId } = get();
+        return friends.filter((f) => f.tier === tier && (!currentGardenId || f.gardenId === currentGardenId));
       },
 
       getFriendsNeedingAttention: () => {
+        const { friends, currentGardenId } = get();
         const allHealth = get().getAllFriendsHealth();
         const needsAttention = allHealth
           .filter((h) => h.healthStatus === 'at_risk' || h.healthStatus === 'cooling')
           .map((h) => h.friendId);
 
-        return get().friends.filter((f) => needsAttention.includes(f.id));
+        return friends.filter((f) =>
+          needsAttention.includes(f.id) &&
+          (!currentGardenId || f.gardenId === currentGardenId)
+        );
       },
 
       getUpcomingBirthdays: (days = 30) => {
+        const { friends, currentGardenId } = get();
         const now = new Date();
         const thisYear = now.getFullYear();
 
-        return get()
-          .friends.filter((f) => {
+        const gardenFriends = currentGardenId
+          ? friends.filter((f) => f.gardenId === currentGardenId)
+          : friends;
+
+        return gardenFriends
+          .filter((f) => {
             if (!f.birthday) return false;
 
             // Parse birthday (YYYY-MM-DD) and set to this year
@@ -378,6 +500,12 @@ export const useFriendStore = create<FriendStore>()(
               getNextBirthday(b.birthday!).getTime()
             );
           });
+      },
+
+      getCurrentGardenFriends: () => {
+        const { friends, currentGardenId } = get();
+        if (!currentGardenId) return [];
+        return friends.filter((f) => f.gardenId === currentGardenId);
       },
     }),
     {

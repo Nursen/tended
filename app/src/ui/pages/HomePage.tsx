@@ -3,11 +3,14 @@ import { PlantCard } from '../components/PlantCard';
 import './HomePage.css';
 
 export function HomePage() {
-  const friends = useFriendStore((state) => state.friends);
+  const getCurrentGardenFriends = useFriendStore((state) => state.getCurrentGardenFriends);
   const getAllFriendsHealth = useFriendStore((state) => state.getAllFriendsHealth);
   const getUpcomingBirthdays = useFriendStore((state) => state.getUpcomingBirthdays);
   const loadDemoData = useFriendStore((state) => state.loadDemoData);
   const clearAllData = useFriendStore((state) => state.clearAllData);
+  const currentGarden = useFriendStore((state) => state.getCurrentGarden());
+
+  const friends = getCurrentGardenFriends();
 
   const healthMetrics = getAllFriendsHealth();
   const upcomingBirthdays = getUpcomingBirthdays(14);
@@ -80,7 +83,22 @@ export function HomePage() {
         </section>
       )}
 
-      {friends.length === 0 && (
+      {!currentGarden && (
+        <section className="empty-state">
+          <div className="empty-illustration">
+            <span className="big-plant">🏠</span>
+          </div>
+          <h3>Create your first garden</h3>
+          <p>Gardens help you organize friends by context - local, long-distance, work, etc.</p>
+          <div className="empty-actions">
+            <button className="btn btn-primary" onClick={loadDemoData}>
+              Try the demo garden
+            </button>
+          </div>
+        </section>
+      )}
+
+      {currentGarden && friends.length === 0 && (
         <section className="empty-state">
           <div className="empty-illustration">
             <span className="big-plant">🌱</span>
@@ -91,9 +109,6 @@ export function HomePage() {
             <a href="/friends" className="btn btn-primary">
               Plant your first friend
             </a>
-            <button className="btn btn-secondary" onClick={loadDemoData}>
-              Load demo garden
-            </button>
           </div>
         </section>
       )}

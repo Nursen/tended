@@ -24,8 +24,10 @@ const TIER_DESCRIPTIONS: Record<Tier, string> = {
 export function FriendsPage() {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
-  const friends = useFriendStore((state) => state.friends);
+  const getCurrentGardenFriends = useFriendStore((state) => state.getCurrentGardenFriends);
   const getAllFriendsHealth = useFriendStore((state) => state.getAllFriendsHealth);
+
+  const friends = getCurrentGardenFriends();
 
   const healthMetrics = getAllFriendsHealth();
 
