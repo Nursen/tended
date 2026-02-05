@@ -5,9 +5,12 @@
 .welcome-section {
   margin-bottom: var(--space-8);
   padding: var(--space-6);
-  background: white;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 2px 12px rgba(44, 62, 42, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.5);
 }
 
 .welcome-section h1 {
@@ -28,10 +31,13 @@
 }
 
 .dashboard-card {
-  background: white;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border-radius: var(--radius-lg);
   padding: var(--space-6);
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 2px 12px rgba(44, 62, 42, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.5);
 }
 
 .dashboard-card h2 {
@@ -85,10 +91,13 @@
 
 /* Garden preview */
 .garden-preview {
-  background: white;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border-radius: var(--radius-lg);
   padding: var(--space-6);
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 2px 12px rgba(44, 62, 42, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.5);
 }
 
 .section-header {
@@ -127,9 +136,12 @@
 .empty-state {
   text-align: center;
   padding: var(--space-12) var(--space-6);
-  background: white;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 2px 12px rgba(44, 62, 42, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.5);
 }
 
 .empty-illustration {

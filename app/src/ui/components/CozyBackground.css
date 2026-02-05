@@ -6,6 +6,7 @@
   height: 100%;
   z-index: -1;
   overflow: hidden;
+  pointer-events: none;
 }
 
 .background-svg {
@@ -14,45 +15,77 @@
   object-fit: cover;
 }
 
-/* Cloud animations */
+/* Cloud animations - slow and dreamy */
 .clouds .cloud {
-  animation: cloudFloat 30s ease-in-out infinite;
+  animation: cloudDrift 60s ease-in-out infinite;
 }
 
 .cloud-1 {
   animation-delay: 0s;
-  animation-duration: 35s;
+  animation-duration: 80s;
 }
 
 .cloud-2 {
-  animation-delay: -10s;
-  animation-duration: 40s;
+  animation-delay: -20s;
+  animation-duration: 70s;
 }
 
 .cloud-3 {
-  animation-delay: -20s;
-  animation-duration: 45s;
+  animation-delay: -40s;
+  animation-duration: 90s;
 }
 
-@keyframes cloudFloat {
+@keyframes cloudDrift {
   0%, 100% {
     transform: translateX(0);
   }
   50% {
-    transform: translateX(30px);
+    transform: translateX(40px);
   }
 }
 
-/* Subtle shimmer on window */
-.window rect[fill="url(#skyGradient)"] {
-  animation: skyShimmer 8s ease-in-out infinite;
+/* Floating dust particles */
+.particle {
+  animation: particleFloat 8s ease-in-out infinite;
 }
 
-@keyframes skyShimmer {
+.p1 { animation-delay: 0s; animation-duration: 7s; }
+.p2 { animation-delay: -1s; animation-duration: 9s; }
+.p3 { animation-delay: -2s; animation-duration: 6s; }
+.p4 { animation-delay: -3s; animation-duration: 8s; }
+.p5 { animation-delay: -4s; animation-duration: 10s; }
+.p6 { animation-delay: -5s; animation-duration: 7.5s; }
+
+@keyframes particleFloat {
   0%, 100% {
-    opacity: 1;
+    transform: translate(0, 0);
+    opacity: 0.3;
+  }
+  25% {
+    transform: translate(5px, -10px);
+    opacity: 0.6;
   }
   50% {
-    opacity: 0.95;
+    transform: translate(-3px, -5px);
+    opacity: 0.4;
+  }
+  75% {
+    transform: translate(8px, -15px);
+    opacity: 0.5;
+  }
+}
+
+/* Gentle sway for hanging plant */
+.hanging-plant {
+  transform-origin: 180px 0;
+  animation: gentleSway 6s ease-in-out infinite;
+}
+
+@keyframes gentleSway {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(1deg);
   }
 }

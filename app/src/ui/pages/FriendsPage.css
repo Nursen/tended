@@ -9,10 +9,12 @@
   align-items: center;
   margin-bottom: var(--space-8);
   padding: var(--space-4) var(--space-6);
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 2px 12px rgba(44, 62, 42, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.5);
 }
 
 .garden-title h1 {
