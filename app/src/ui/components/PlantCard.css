@@ -2,20 +2,18 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: var(--space-4);
-  background: var(--color-surface);
-  border-radius: var(--radius-lg);
+  padding: var(--space-3);
   text-decoration: none;
-  transition: all var(--duration-normal) var(--ease-out);
+  transition: transform var(--duration-normal) var(--ease-out);
+  flex-shrink: 0;
 }
 
 .plant-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-md);
+  transform: translateY(-8px);
 }
 
-.plant-card:hover .plant-placeholder {
-  animation: bounce 0.6s var(--ease-bounce);
+.plant-card:hover .plant {
+  animation: plantBounce 0.6s var(--ease-bounce);
 }
 
 .plant-visual {
@@ -24,6 +22,11 @@
 
 .plant-info {
   text-align: center;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(8px);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
 }
 
 .plant-name {
@@ -37,4 +40,33 @@
 .plant-status {
   font-size: var(--text-xs);
   color: var(--color-text-muted);
+}
+
+/* Size variants */
+.plant-card-sm {
+  padding: var(--space-2);
+}
+
+.plant-card-sm .plant-name {
+  font-size: var(--text-sm);
+}
+
+.plant-card-md .plant-name {
+  font-size: var(--text-base);
+}
+
+.plant-card-lg {
+  padding: var(--space-4);
+}
+
+.plant-card-lg .plant-name {
+  font-size: var(--text-lg);
+}
+
+.plant-card-lg .plant-status {
+  font-size: var(--text-sm);
+}
+
+.plant-card-lg .plant-info {
+  padding: var(--space-3) var(--space-4);
 }

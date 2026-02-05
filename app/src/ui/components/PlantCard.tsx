@@ -8,6 +8,7 @@ import './PlantCard.css';
 interface PlantCardProps {
   friend: Friend;
   health: FriendHealthMetrics | null;
+  size?: 'sm' | 'md' | 'lg';
 }
 
 const STATUS_COLORS: Record<HealthStatus, string> = {
@@ -18,18 +19,18 @@ const STATUS_COLORS: Record<HealthStatus, string> = {
   dormant: 'var(--color-health-dormant)',
 };
 
-export function PlantCard({ friend, health }: PlantCardProps) {
+export function PlantCard({ friend, health, size = 'md' }: PlantCardProps) {
   const status = health?.healthStatus || 'healthy';
   const plantAppearance = useFriendStore((state) => state.getPlantAppearance(friend.id));
   const expression = healthToExpression(status);
 
   return (
-    <Link to={`/friends/${friend.id}`} className="plant-card">
+    <Link to={`/friends/${friend.id}`} className={`plant-card plant-card-${size}`}>
       <div className="plant-visual">
         <Plant
           plantType={plantAppearance?.plantType || 'monstera'}
           expression={expression}
-          size="sm"
+          size={size}
           animate={true}
         />
       </div>

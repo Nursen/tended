@@ -1,11 +1,9 @@
 import { Outlet, NavLink } from 'react-router-dom';
-import { CozyBackground } from './CozyBackground';
 import './Layout.css';
 
 export function Layout() {
   return (
     <div className="layout">
-      <CozyBackground />
       <header className="header">
         <div className="header-content">
           <NavLink to="/" className="logo">

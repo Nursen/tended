@@ -2,6 +2,7 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  background: var(--color-background);
 }
 
 .header {
@@ -18,7 +19,7 @@
   align-items: center;
   justify-content: space-between;
   padding: var(--space-4) var(--space-6);
-  max-width: 1000px;
+  max-width: 1400px;
   margin: 0 auto;
   width: 100%;
 }
@@ -69,15 +70,20 @@
   flex: 1;
   display: flex;
   justify-content: center;
-  padding: var(--space-6);
+  padding: var(--space-6) var(--space-8);
 }
 
 .main-content {
   width: 100%;
-  max-width: 900px;
+  max-width: 1200px;
 }
 
-/* Glass card effect for content areas */
-.main-content > * {
-  position: relative;
+@media (max-width: 768px) {
+  .main {
+    padding: var(--space-4);
+  }
+
+  .header-content {
+    padding: var(--space-3) var(--space-4);
+  }
 }

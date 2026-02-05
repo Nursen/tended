@@ -21,9 +21,9 @@ interface PlantProps {
 }
 
 const SIZE_MAP = {
-  sm: 80,
-  md: 120,
-  lg: 180,
+  sm: 100,
+  md: 140,
+  lg: 200,
 };
 
 export function Plant({

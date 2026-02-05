@@ -13,67 +13,84 @@ const TIER_LABELS: Record<Tier, string> = {
   5: 'Acquaintances',
 };
 
+const TIER_DESCRIPTIONS: Record<Tier, string> = {
+  1: 'High-maintenance tropicals',
+  2: 'Expressive houseplants',
+  3: 'Forgiving everyday plants',
+  4: 'Low-maintenance succulents',
+  5: 'Neglect-tolerant cacti',
+};
+
 export function FriendsPage() {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [filterTier, setFilterTier] = useState<Tier | 'all'>('all');
 
   const friends = useFriendStore((state) => state.friends);
   const getAllFriendsHealth = useFriendStore((state) => state.getAllFriendsHealth);
 
   const healthMetrics = getAllFriendsHealth();
 
-  const filteredFriends = filterTier === 'all'
-    ? friends
-    : friends.filter((f) => f.tier === filterTier);
+  // Group friends by tier
+  const friendsByTier = friends.reduce((acc, friend) => {
+    if (!acc[friend.tier]) acc[friend.tier] = [];
+    acc[friend.tier].push(friend);
+    return acc;
+  }, {} as Record<Tier, typeof friends>);
+
+  // Get tiers that have friends
+  const activeTiers = ([1, 2, 3, 4, 5] as Tier[]).filter(
+    (tier) => friendsByTier[tier]?.length > 0
+  );
 
   return (
     <div className="friends-page">
-      <header className="page-header">
-        <div>
+      <header className="garden-header">
+        <div className="garden-title">
           <h1>Your Garden</h1>
           <p className="subtitle">
-            {friends.length} friend{friends.length === 1 ? '' : 's'} in your garden
+            {friends.length} plant{friends.length === 1 ? '' : 's'} growing
           </p>
         </div>
-        <button className="btn btn-primary" onClick={() => setIsAddModalOpen(true)}>
+        <button className="btn btn-primary add-btn" onClick={() => setIsAddModalOpen(true)}>
           + Add Friend
         </button>
       </header>
 
-      <div className="filters">
-        <button
-          className={`filter-chip ${filterTier === 'all' ? 'active' : ''}`}
-          onClick={() => setFilterTier('all')}
-        >
-          All
-        </button>
-        {([1, 2, 3, 4, 5] as Tier[]).map((tier) => (
-          <button
-            key={tier}
-            className={`filter-chip ${filterTier === tier ? 'active' : ''}`}
-            onClick={() => setFilterTier(tier)}
-          >
-            {TIER_LABELS[tier]}
-          </button>
-        ))}
-      </div>
-
-      {filteredFriends.length > 0 ? (
-        <div className="plant-grid">
-          {filteredFriends.map((friend) => {
-            const health = healthMetrics.find((h) => h.friendId === friend.id);
-            return <PlantCard key={friend.id} friend={friend} health={health || null} />;
-          })}
+      {friends.length === 0 ? (
+        <div className="empty-garden">
+          <div className="empty-shelf">
+            <div className="shelf-surface"></div>
+            <p className="empty-text">Your shelves are empty...</p>
+            <button className="btn btn-primary" onClick={() => setIsAddModalOpen(true)}>
+              Plant your first friend
+            </button>
+          </div>
         </div>
       ) : (
-        <div className="empty-state">
-          <div className="empty-illustration">🌿</div>
-          <h3>No friends here yet</h3>
-          <p>
-            {filterTier === 'all'
-              ? 'Add your first friend to start growing your garden.'
-              : `No friends in ${TIER_LABELS[filterTier as Tier]} yet.`}
-          </p>
+        <div className="garden-shelves">
+          {activeTiers.map((tier) => (
+            <div key={tier} className="shelf-row">
+              <div className="shelf-label">
+                <span className="tier-name">{TIER_LABELS[tier]}</span>
+                <span className="tier-desc">{TIER_DESCRIPTIONS[tier]}</span>
+              </div>
+              <div className="shelf">
+                <div className="plants-on-shelf">
+                  {friendsByTier[tier].map((friend) => {
+                    const health = healthMetrics.find((h) => h.friendId === friend.id);
+                    return (
+                      <PlantCard
+                        key={friend.id}
+                        friend={friend}
+                        health={health || null}
+                        size="lg"
+                      />
+                    );
+                  })}
+                </div>
+                <div className="shelf-surface"></div>
+              </div>
+            </div>
+          ))}
         </div>
       )}
 
