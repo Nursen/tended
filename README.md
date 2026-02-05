@@ -121,6 +121,10 @@ The app celebrates connection, it doesn't shame neglect. Nudges are opportunitie
 - No cloud sync required
 - This is a personal tool, not a social network
 
+## Live Demo
+
+Deployed on Netlify with auto-deploy from main branch.
+
 ## Getting Started
 
 ```bash
@@ -151,6 +155,7 @@ npm run dev
 ## Contributing
 
 This is a personal project, but the design documents are thorough enough to onboard collaborators. See:
+- `CONTRIBUTING.md` — Code patterns, conventions, and how to add features
 - `ILLUSTRATION_DESIGN_BRIEF.md` — Full illustrator handoff
 - `BRAND_IDENTITY_v2.md` — Visual design system
 - `IMPLEMENTATION_GUIDE.md` — Technical implementation guide
