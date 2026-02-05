@@ -22,10 +22,10 @@ export function CozyBackground() {
             <stop offset="100%" stopColor="#FFF9F3" />
           </linearGradient>
 
-          {/* Sunlight glow */}
-          <radialGradient id="sunGlow" cx="80%" cy="15%" r="50%">
-            <stop offset="0%" stopColor="#FFF8E7" stopOpacity="0.6" />
-            <stop offset="50%" stopColor="#FFF8E7" stopOpacity="0.2" />
+          {/* Sunlight glow - from right edge */}
+          <radialGradient id="sunGlow" cx="95%" cy="20%" r="45%">
+            <stop offset="0%" stopColor="#FFF8E7" stopOpacity="0.7" />
+            <stop offset="40%" stopColor="#FFF8E7" stopOpacity="0.3" />
             <stop offset="100%" stopColor="#FFF8E7" stopOpacity="0" />
           </radialGradient>
 
@@ -42,81 +42,83 @@ export function CozyBackground() {
         {/* Sunlight overlay */}
         <rect x="0" y="0" width="1600" height="900" fill="url(#sunGlow)" />
 
-        {/* Window - positioned top right */}
-        <g className="window" opacity="0.9">
+        {/* Window - positioned far right edge */}
+        <g className="window" opacity="0.95">
           {/* Window recess shadow */}
-          <rect x="1140" y="50" width="340" height="380" rx="12" fill="#E8DFD4" opacity="0.3" />
+          <rect x="1340" y="80" width="280" height="320" rx="12" fill="#E8DFD4" opacity="0.3" />
 
           {/* Window frame outer */}
-          <rect x="1150" y="40" width="320" height="360" rx="10" fill="#E8DDD0" />
+          <rect x="1350" y="70" width="260" height="300" rx="10" fill="#E8DDD0" />
 
           {/* Sky view */}
-          <rect x="1165" y="55" width="290" height="330" rx="6" fill="url(#skyGradient)" />
+          <rect x="1362" y="82" width="236" height="276" rx="6" fill="url(#skyGradient)" />
 
           {/* Window frame divisions */}
-          <rect x="1305" y="55" width="8" height="330" fill="#DDD5C8" />
-          <rect x="1165" y="215" width="290" height="8" fill="#DDD5C8" />
+          <rect x="1476" y="82" width="6" height="276" fill="#DDD5C8" />
+          <rect x="1362" y="216" width="236" height="6" fill="#DDD5C8" />
 
           {/* Window frame inner border */}
-          <rect x="1165" y="55" width="290" height="330" rx="6" fill="none" stroke="#CFC5B8" strokeWidth="3" />
+          <rect x="1362" y="82" width="236" height="276" rx="6" fill="none" stroke="#CFC5B8" strokeWidth="3" />
 
           {/* Clouds */}
           <g className="clouds">
             <g className="cloud cloud-1">
-              <ellipse cx="1220" cy="100" rx="35" ry="18" fill="white" opacity="0.85" />
-              <ellipse cx="1250" cy="95" rx="28" ry="15" fill="white" opacity="0.85" />
-              <ellipse cx="1235" cy="108" rx="22" ry="12" fill="white" opacity="0.85" />
+              <ellipse cx="1410" cy="120" rx="30" ry="15" fill="white" opacity="0.85" />
+              <ellipse cx="1435" cy="115" rx="24" ry="12" fill="white" opacity="0.85" />
+              <ellipse cx="1420" cy="128" rx="18" ry="10" fill="white" opacity="0.85" />
             </g>
             <g className="cloud cloud-2">
-              <ellipse cx="1380" cy="140" rx="28" ry="14" fill="white" opacity="0.8" />
-              <ellipse cx="1405" cy="135" rx="22" ry="12" fill="white" opacity="0.8" />
-              <ellipse cx="1392" cy="145" rx="18" ry="10" fill="white" opacity="0.8" />
+              <ellipse cx="1530" cy="150" rx="24" ry="12" fill="white" opacity="0.8" />
+              <ellipse cx="1550" cy="145" rx="18" ry="10" fill="white" opacity="0.8" />
+              <ellipse cx="1540" cy="155" rx="15" ry="8" fill="white" opacity="0.8" />
             </g>
             <g className="cloud cloud-3">
-              <ellipse cx="1280" cy="280" rx="25" ry="12" fill="white" opacity="0.7" />
-              <ellipse cx="1302" cy="276" rx="20" ry="10" fill="white" opacity="0.7" />
+              <ellipse cx="1450" cy="280" rx="20" ry="10" fill="white" opacity="0.7" />
+              <ellipse cx="1468" cy="276" rx="16" ry="8" fill="white" opacity="0.7" />
             </g>
           </g>
 
           {/* Window sill */}
-          <rect x="1135" y="400" width="350" height="18" rx="3" fill="#DDD5C8" />
-          <rect x="1140" y="395" width="340" height="8" fill="#E8E0D5" />
+          <rect x="1335" y="370" width="290" height="16" rx="3" fill="#DDD5C8" />
+          <rect x="1340" y="365" width="280" height="7" fill="#E8E0D5" />
 
           {/* Small succulent on windowsill */}
-          <g transform="translate(1280, 365)">
-            <ellipse cx="20" cy="32" rx="12" ry="3" fill="#2C3E2A" opacity="0.08" />
-            <path d="M12,22 L14,32 L26,32 L28,22 Q28,18 20,18 Q12,18 12,22 Z" fill="#D4896A" opacity="0.7" />
-            <ellipse cx="20" cy="16" rx="6" ry="4" fill="#7CAA6D" opacity="0.8" />
-            <ellipse cx="16" cy="14" rx="4" ry="3" fill="#8BB87A" opacity="0.8" />
-            <ellipse cx="24" cy="14" rx="4" ry="3" fill="#8BB87A" opacity="0.8" />
+          <g transform="translate(1450, 340)">
+            <ellipse cx="16" cy="28" rx="10" ry="3" fill="#2C3E2A" opacity="0.08" />
+            <path d="M9,19 L11,28 L21,28 L23,19 Q23,15 16,15 Q9,15 9,19 Z" fill="#D4896A" opacity="0.7" />
+            <ellipse cx="16" cy="13" rx="5" ry="3" fill="#7CAA6D" opacity="0.8" />
+            <ellipse cx="12" cy="11" rx="3" ry="2.5" fill="#8BB87A" opacity="0.8" />
+            <ellipse cx="20" cy="11" rx="3" ry="2.5" fill="#8BB87A" opacity="0.8" />
           </g>
         </g>
 
-        {/* Subtle hanging plant - left side */}
-        <g className="hanging-plant" opacity="0.5">
-          <line x1="180" y1="0" x2="180" y2="80" stroke="#A69080" strokeWidth="2" />
-          <ellipse cx="180" cy="95" rx="25" ry="15" fill="#C4956B" opacity="0.6" />
+        {/* Subtle hanging plant - far left edge */}
+        <g className="hanging-plant" opacity="0.6">
+          <line x1="60" y1="0" x2="60" y2="100" stroke="#A69080" strokeWidth="2" />
+          <ellipse cx="60" cy="115" rx="28" ry="16" fill="#C4956B" opacity="0.6" />
           {/* Trailing vines */}
-          <path d="M165,95 Q150,130 155,170 Q145,200 150,240" stroke="#7CAA6D" strokeWidth="2" fill="none" opacity="0.7" />
-          <path d="M180,100 Q175,140 180,180 Q170,220 175,260" stroke="#7CAA6D" strokeWidth="2" fill="none" opacity="0.6" />
-          <path d="M195,95 Q210,135 205,175 Q215,210 210,250" stroke="#8BB87A" strokeWidth="2" fill="none" opacity="0.7" />
+          <path d="M42,115 Q25,160 30,210 Q20,260 25,320" stroke="#7CAA6D" strokeWidth="2.5" fill="none" opacity="0.7" />
+          <path d="M60,120 Q55,170 60,230 Q50,290 55,360" stroke="#7CAA6D" strokeWidth="2.5" fill="none" opacity="0.6" />
+          <path d="M78,115 Q95,165 90,220 Q100,280 95,350" stroke="#8BB87A" strokeWidth="2.5" fill="none" opacity="0.7" />
           {/* Small leaves */}
-          <circle cx="155" cy="170" r="4" fill="#7CAA6D" opacity="0.7" />
-          <circle cx="150" cy="240" r="3" fill="#8BB87A" opacity="0.6" />
-          <circle cx="180" cy="180" r="4" fill="#7CAA6D" opacity="0.6" />
-          <circle cx="175" cy="260" r="3" fill="#8BB87A" opacity="0.5" />
-          <circle cx="205" cy="175" r="4" fill="#7CAA6D" opacity="0.7" />
-          <circle cx="210" cy="250" r="3" fill="#8BB87A" opacity="0.6" />
+          <circle cx="30" cy="210" r="5" fill="#7CAA6D" opacity="0.7" />
+          <circle cx="25" cy="320" r="4" fill="#8BB87A" opacity="0.6" />
+          <circle cx="60" cy="230" r="5" fill="#7CAA6D" opacity="0.6" />
+          <circle cx="55" cy="360" r="4" fill="#8BB87A" opacity="0.5" />
+          <circle cx="90" cy="220" r="5" fill="#7CAA6D" opacity="0.7" />
+          <circle cx="95" cy="350" r="4" fill="#8BB87A" opacity="0.6" />
         </g>
 
-        {/* Floating dust particles in sunlight */}
+        {/* Floating dust particles in sunlight - right side where window is */}
         <g className="particles">
-          <circle className="particle p1" cx="1200" cy="150" r="1.5" fill="#FFE8B8" opacity="0.6" />
-          <circle className="particle p2" cx="1280" cy="200" r="1" fill="#FFE8B8" opacity="0.5" />
-          <circle className="particle p3" cx="1350" cy="120" r="1.2" fill="#FFE8B8" opacity="0.4" />
-          <circle className="particle p4" cx="1180" cy="250" r="1" fill="#FFE8B8" opacity="0.5" />
-          <circle className="particle p5" cx="1320" cy="180" r="1.3" fill="#FFE8B8" opacity="0.6" />
-          <circle className="particle p6" cx="1250" cy="300" r="1" fill="#FFE8B8" opacity="0.4" />
+          <circle className="particle p1" cx="1420" cy="180" r="2" fill="#FFE8B8" opacity="0.7" />
+          <circle className="particle p2" cx="1500" cy="250" r="1.5" fill="#FFE8B8" opacity="0.6" />
+          <circle className="particle p3" cx="1550" cy="150" r="1.8" fill="#FFE8B8" opacity="0.5" />
+          <circle className="particle p4" cx="1380" cy="320" r="1.5" fill="#FFE8B8" opacity="0.6" />
+          <circle className="particle p5" cx="1480" cy="220" r="1.8" fill="#FFE8B8" opacity="0.7" />
+          <circle className="particle p6" cx="1450" cy="380" r="1.5" fill="#FFE8B8" opacity="0.5" />
+          <circle className="particle p7" cx="1520" cy="300" r="1.2" fill="#FFE8B8" opacity="0.6" />
+          <circle className="particle p8" cx="1400" cy="450" r="1.8" fill="#FFE8B8" opacity="0.5" />
         </g>
 
         {/* Floor/baseboard hint */}

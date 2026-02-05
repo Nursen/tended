@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Outlet, NavLink } from 'react-router-dom';
 import { useFriendStore } from '../../core/stores/friendStore';
-import { CozyBackground } from './CozyBackground';
 import './Layout.css';
 
 export function Layout() {
@@ -28,7 +27,6 @@ export function Layout() {
 
   return (
     <div className="layout">
-      <CozyBackground />
       <header className="header">
         <div className="header-content">
           <NavLink to="/" className="logo">

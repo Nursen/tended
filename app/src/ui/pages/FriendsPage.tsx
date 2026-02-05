@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useFriendStore } from '../../core/stores/friendStore';
 import { PlantCard } from '../components/PlantCard';
 import { AddFriendModal } from '../components/AddFriendModal';
+import { CozyBackground } from '../components/CozyBackground';
 import type { Tier } from '../../core/models/types';
 import './FriendsPage.css';
 
@@ -45,6 +46,7 @@ export function FriendsPage() {
 
   return (
     <div className="friends-page">
+      <CozyBackground />
       <header className="garden-header">
         <div className="garden-title">
           <h1>Your Garden</h1>
