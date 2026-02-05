@@ -45,4 +45,19 @@ coverage/
 scripts/__pycache__/
 
 # Large assets (keep in separate storage)
-# *.jpg - commenting out since we have reference images
+*.jpg
+*.jpeg
+*.psd
+*.ai
+
+# AI assistant artifacts
+CLAUDE.md
+.claude/
+*.planning.md
+scratch.md
+notes.md
+
+# Design working files
+*.sketch
+*.fig
+*.xd
