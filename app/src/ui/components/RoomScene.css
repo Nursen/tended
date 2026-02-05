@@ -1,0 +1,85 @@
+/**
+ * RoomScene - Full viewport immersive room
+ */
+
+.room-scene {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+}
+
+/* Room content grid - sits on top of background */
+.room-content {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 260px 1fr 140px;
+  gap: var(--space-6);
+  height: 100vh;
+  padding: var(--space-6);
+  padding-bottom: 100px; /* Space for floating toolbar */
+  overflow-y: auto;
+}
+
+.room-left {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding-top: var(--space-8);
+}
+
+.room-center {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  padding-top: var(--space-4);
+}
+
+.room-right {
+  /* Reserved for window area - visual only from CozyBackground */
+}
+
+/* Overlay backdrop - dims room */
+.room-overlay-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(44, 62, 42, 0.3);
+  backdrop-filter: blur(2px);
+  z-index: 10;
+  cursor: pointer;
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .room-content {
+    grid-template-columns: 220px 1fr 100px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .room-content {
+    grid-template-columns: 1fr;
+    padding-bottom: 120px;
+  }
+
+  .room-left {
+    order: 2;
+    flex-direction: row;
+    overflow-x: auto;
+    padding-top: 0;
+  }
+
+  .room-center {
+    order: 1;
+  }
+
+  .room-right {
+    display: none;
+  }
+}

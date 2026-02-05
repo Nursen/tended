@@ -1,15 +1,15 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
 import { useFriendStore } from '../../core/stores/friendStore';
+import { useUIStore } from '../../core/stores/uiStore';
 import { Plant, healthToExpression } from './Plant';
 import './NeedsLoveShelf.css';
 
 export function NeedsLoveShelf() {
-  const navigate = useNavigate();
   const getCurrentGardenFriends = useFriendStore((state) => state.getCurrentGardenFriends);
   const getAllFriendsHealth = useFriendStore((state) => state.getAllFriendsHealth);
   const plantAppearances = useFriendStore((state) => state.plantAppearances);
+  const openPlantCloseup = useUIStore((state) => state.openPlantCloseup);
 
   const friends = getCurrentGardenFriends();
   const healthMetrics = getAllFriendsHealth();
@@ -33,9 +33,11 @@ export function NeedsLoveShelf() {
     setIsWatering(true);
     setWateredPlant(friendId);
 
-    // Navigate to friend detail after animation
+    // Open plant closeup after animation
     setTimeout(() => {
-      navigate(`/friends/${friendId}`);
+      openPlantCloseup(friendId);
+      setIsWatering(false);
+      setWateredPlant(null);
     }, 800);
   };
 

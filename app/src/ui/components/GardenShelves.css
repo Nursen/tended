@@ -1,39 +1,15 @@
-.friends-page {
-  animation: fadeIn var(--duration-normal) var(--ease-out);
-  min-height: 80vh;
-  position: relative;
-}
+/**
+ * GardenShelves - Tier-organized plant shelves
+ */
 
-/* Room layout - 3 column grid */
-.room-layout {
-  display: grid;
-  grid-template-columns: 240px 1fr 120px;
-  gap: var(--space-6);
-  position: relative;
-  z-index: 1;
-}
-
-.room-left {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
-}
-
-.room-center {
+.garden-shelves {
   display: flex;
   flex-direction: column;
   gap: var(--space-6);
 }
 
-.room-right {
-  /* Reserved for window area - visual only */
-}
-
-/* Garden header */
-.garden-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+/* Garden title card */
+.garden-title-card {
   padding: var(--space-4) var(--space-6);
   background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(10px);
@@ -44,52 +20,16 @@
 }
 
 .garden-title h1 {
+  font-family: var(--font-display);
   margin-bottom: var(--space-1);
 }
 
-.subtitle {
+.plant-count {
   color: var(--color-text-secondary);
+  font-size: var(--text-sm);
 }
 
-.add-btn {
-  white-space: nowrap;
-}
-
-/* Empty state */
-.empty-garden {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 400px;
-}
-
-.empty-shelf {
-  text-align: center;
-  padding: var(--space-8);
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(8px);
-  border-radius: var(--radius-lg);
-}
-
-.empty-shelf .shelf-surface {
-  width: 300px;
-  height: 16px;
-  margin: 0 auto var(--space-6);
-}
-
-.empty-text {
-  color: var(--color-text-muted);
-  font-size: var(--text-lg);
-  margin-bottom: var(--space-4);
-}
-
-/* Shelves layout */
-.garden-shelves {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-8);
-}
-
+/* Shelf rows */
 .shelf-row {
   display: flex;
   gap: var(--space-6);
@@ -98,14 +38,14 @@
 
 .shelf-label {
   flex-shrink: 0;
-  width: 120px;
+  width: 110px;
   padding-bottom: var(--space-6);
   text-align: right;
 }
 
 .tier-name {
   display: block;
-  font-family: var(--font-heading);
+  font-family: var(--font-display);
   font-weight: var(--font-semibold);
   color: var(--color-text-primary);
   margin-bottom: var(--space-1);
@@ -141,6 +81,7 @@
   border-radius: 3px;
 }
 
+/* Wooden shelf surface */
 .shelf-surface {
   height: 18px;
   background: linear-gradient(180deg, #D4A574 0%, #C4956B 40%, #A67B52 100%);
@@ -162,27 +103,48 @@
   border-radius: 2px 2px 0 0;
 }
 
-/* Responsive */
-@media (max-width: 1024px) {
-  .room-layout {
-    grid-template-columns: 1fr;
-  }
-
-  .room-left {
-    order: 2;
-    flex-direction: row;
-    overflow-x: auto;
-  }
-
-  .room-center {
-    order: 1;
-  }
-
-  .room-right {
-    display: none;
-  }
+/* Empty state */
+.garden-shelves-empty {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  text-align: center;
 }
 
+.empty-shelf-content {
+  padding: var(--space-8);
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--space-4);
+}
+
+.empty-illustration {
+  margin-bottom: var(--space-4);
+}
+
+.big-seedling {
+  font-size: 4rem;
+  display: block;
+}
+
+.garden-shelves-empty h2 {
+  font-family: var(--font-display);
+  margin-bottom: var(--space-2);
+}
+
+.garden-shelves-empty p {
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-4);
+}
+
+.garden-shelves-empty .shelf-surface {
+  width: 300px;
+}
+
+/* Responsive */
 @media (max-width: 768px) {
   .shelf-row {
     flex-direction: column;
@@ -193,11 +155,5 @@
     width: 100%;
     text-align: left;
     padding-bottom: var(--space-2);
-  }
-
-  .garden-header {
-    flex-direction: column;
-    gap: var(--space-4);
-    text-align: center;
   }
 }

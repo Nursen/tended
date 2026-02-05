@@ -1,14 +1,19 @@
-import { Link } from 'react-router-dom';
+/**
+ * PlantOnShelf - Clickable plant card that opens PlantCloseup
+ * Replaces PlantCard's Link with onClick for room scene
+ */
+
+import { motion } from 'framer-motion';
 import type { Friend, FriendHealthMetrics, HealthStatus } from '../../core/models/types';
 import { getLastContactDescription } from '../../core/services/healthService';
 import { Plant, healthToExpression } from './Plant';
 import { useFriendStore } from '../../core/stores/friendStore';
-import './PlantCard.css';
+import { useUIStore } from '../../core/stores/uiStore';
+import './PlantOnShelf.css';
 
-interface PlantCardProps {
+interface PlantOnShelfProps {
   friend: Friend;
   health: FriendHealthMetrics | null;
-  size?: 'sm' | 'md' | 'lg';
 }
 
 const STATUS_COLORS: Record<HealthStatus, string> = {
@@ -19,31 +24,39 @@ const STATUS_COLORS: Record<HealthStatus, string> = {
   dormant: 'var(--color-health-dormant)',
 };
 
-export function PlantCard({ friend, health, size = 'md' }: PlantCardProps) {
+export function PlantOnShelf({ friend, health }: PlantOnShelfProps) {
   const status = health?.healthStatus || 'healthy';
   const plantAppearance = useFriendStore((state) => state.getPlantAppearance(friend.id));
+  const openPlantCloseup = useUIStore((state) => state.openPlantCloseup);
+
   const expression = healthToExpression(status);
 
   return (
-    <Link to={`/friends/${friend.id}`} className={`plant-card plant-card-${size}`}>
+    <motion.button
+      className="plant-on-shelf"
+      onClick={() => openPlantCloseup(friend.id)}
+      whileHover={{ scale: 1.05, y: -4 }}
+      whileTap={{ scale: 0.98 }}
+      layoutId={`plant-${friend.id}`}
+    >
       <div className="plant-visual">
         <Plant
           plantType={plantAppearance?.plantType || 'monstera'}
           expression={expression}
-          size={size}
+          size="md"
           animate={true}
         />
       </div>
       <div className="plant-info">
-        <span className="plant-name">{friend.name}</span>
+        <span className="plant-name">{friend.name.split(' ')[0]}</span>
         {health && (
           <span className="plant-status" style={{ color: STATUS_COLORS[status] }}>
             {health.daysSinceLastContact < 0
-              ? 'New friend'
+              ? 'New'
               : getLastContactDescription(health.daysSinceLastContact)}
           </span>
         )}
       </div>
-    </Link>
+    </motion.button>
   );
 }

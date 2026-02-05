@@ -45,9 +45,9 @@
      TYPOGRAPHY
      ───────────────────────────────────────────────────────────── */
 
-  --font-heading: 'Fredoka', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-accent: 'Caveat', cursive;
+  --font-display: 'Fredoka', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: 'Nunito', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-heading: var(--font-display);  /* Alias for compatibility */
 
   /* Font sizes */
   --text-xs: 0.75rem;    /* 12px */
