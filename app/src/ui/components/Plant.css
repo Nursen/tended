@@ -1,0 +1,82 @@
+.plant {
+  cursor: pointer;
+  user-select: none;
+  transition: transform var(--duration-fast) var(--ease-out);
+}
+
+.plant:hover {
+  transform: scale(1.02);
+}
+
+.plant-svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Bouncing animation on click */
+.plant-bouncing {
+  animation: plantBounce 0.6s var(--ease-bounce);
+}
+
+@keyframes plantBounce {
+  0%, 100% { transform: translateY(0); }
+  30% { transform: translateY(-12px); }
+  50% { transform: translateY(-4px); }
+  70% { transform: translateY(-8px); }
+}
+
+/* Leaf sway animations - each leaf has a slightly different timing */
+.plant-animated .leaf {
+  will-change: transform;
+}
+
+.sway-1 {
+  animation: leafSway 3s ease-in-out infinite;
+  animation-delay: 0s;
+}
+
+.sway-2 {
+  animation: leafSway 3.5s ease-in-out infinite;
+  animation-delay: 0.5s;
+}
+
+.sway-3 {
+  animation: leafSway 2.8s ease-in-out infinite;
+  animation-delay: 1s;
+}
+
+.sway-4 {
+  animation: leafSway 3.2s ease-in-out infinite;
+  animation-delay: 0.3s;
+}
+
+.sway-5 {
+  animation: leafSway 3.8s ease-in-out infinite;
+  animation-delay: 0.8s;
+}
+
+@keyframes leafSway {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(3deg); }
+  75% { transform: rotate(-2deg); }
+}
+
+/* Sleeping zzz float animation */
+.plant-animated text[style*="visible"] {
+  animation: zzzFloat 2s ease-in-out infinite;
+}
+
+@keyframes zzzFloat {
+  0%, 100% { transform: translateY(0); opacity: 0.5; }
+  50% { transform: translateY(-5px); opacity: 0.8; }
+}
+
+/* Sparkle twinkle */
+.plant-animated .face g[style*="visible"] polygon {
+  animation: sparkle 1.5s ease-in-out infinite;
+}
+
+@keyframes sparkle {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.2); }
+}

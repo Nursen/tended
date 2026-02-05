@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tended — Plant Placeholder Preview</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Fredoka', sans-serif;
+    background: #FFF8F0;
+    color: #2C3E2A;
+    min-height: 100vh;
+    padding: 40px 20px;
+  }
+
+  h1 {
+    text-align: center;
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #2C3E2A;
+  }
+
+  .subtitle {
+    text-align: center;
+    color: #7CAA6D;
+    font-size: 16px;
+    margin-bottom: 40px;
+    font-weight: 400;
+  }
+
+  .shelf {
+    max-width: 900px;
+    margin: 0 auto 60px;
+    position: relative;
+  }
+
+  .shelf-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #D4896A;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 16px;
+  }
+
+  .shelf-board {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    padding: 20px 40px 0;
+    position: relative;
+  }
+
+  .shelf-board::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    right: 0;
+    height: 14px;
+    background: linear-gradient(180deg, #C4956B 0%, #A67B52 100%);
+    border-radius: 0 0 4px 4px;
+    box-shadow: 0 4px 8px rgba(44, 62, 42, 0.12);
+  }
+
+  .plant-slot {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    position: relative;
+  }
+
+  .plant-slot:hover {
+    transform: translateY(-4px);
+  }
+
+  .plant-slot:active {
+    transform: translateY(-2px) scale(0.98);
+  }
+
+  .plant-slot svg {
+    width: 160px;
+    height: auto;
+    filter: drop-shadow(0 2px 4px rgba(44, 62, 42, 0.08));
+  }
+
+  .plant-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: #2C3E2A;
+    margin-top: 8px;
+    opacity: 0.7;
+  }
+
+  .plant-tier {
+    font-size: 11px;
+    color: #7CAA6D;
+    font-weight: 400;
+  }
+
+  .controls {
+    max-width: 900px;
+    margin: 0 auto 30px;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .controls button {
+    font-family: 'Fredoka', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 10px 20px;
+    border: 2px solid #7CAA6D;
+    border-radius: 12px;
+    background: white;
+    color: #2C3E2A;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .controls button:hover {
+    background: #7CAA6D;
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(124, 170, 109, 0.3);
+  }
+
+  .controls button.active {
+    background: #7CAA6D;
+    color: white;
+  }
+
+  .info {
+    max-width: 900px;
+    margin: 40px auto 0;
+    background: white;
+    border-radius: 16px;
+    padding: 24px 32px;
+    box-shadow: 0 2px 12px rgba(44, 62, 42, 0.06);
+  }
+
+  .info h2 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+
+  .info p {
+    font-size: 14px;
+    line-height: 1.7;
+    color: #555;
+    font-weight: 400;
+  }
+
+  .info code {
+    background: #f0f5ee;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 13px;
+    color: #2C3E2A;
+  }
+
+  @keyframes leafSway {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(3deg); }
+    75% { transform: rotate(-2deg); }
+  }
+
+  .sway-1 { animation: leafSway 3s ease-in-out infinite; animation-delay: 0s; }
+  .sway-2 { animation: leafSway 3.5s ease-in-out infinite; animation-delay: 0.5s; }
+  .sway-3 { animation: leafSway 2.8s ease-in-out infinite; animation-delay: 1s; }
+  .sway-4 { animation: leafSway 3.2s ease-in-out infinite; animation-delay: 0.3s; }
+  .sway-5 { animation: leafSway 3.8s ease-in-out infinite; animation-delay: 0.8s; }
+
+  @keyframes blink {
+    0%, 94%, 100% { opacity: 1; }
+    96%, 98% { opacity: 0; }
+  }
+
+  .eye-open { animation: blink 4s ease-in-out infinite; }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    30% { transform: translateY(-12px); }
+    50% { transform: translateY(-4px); }
+    70% { transform: translateY(-8px); }
+  }
+
+  .bouncing { animation: bounce 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
+</style>
+</head>
+<body>
+
+<h1>Tended</h1>
+<p class="subtitle">placeholder plant collection — click to interact, buttons to change expressions</p>
+
+<div class="controls">
+  <button onclick="setExpression('happy')" class="active">Happy</button>
+  <button onclick="setExpression('content')">Content</button>
+  <button onclick="setExpression('sleeping')">Sleeping</button>
+  <button onclick="setExpression('worried')">Worried</button>
+  <button onclick="setExpression('winking')">Wink</button>
+</div>
+
+<div class="shelf">
+  <div class="shelf-label">Inner Circle & Close Friends</div>
+  <div class="shelf-board">
+    <div class="plant-slot" onclick="bouncePlant(this)">
+      <div class="plant-wrapper">
+        <!-- MONSTERA (Tier 1) - Inlined SVG -->
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 280" width="200" height="280">
+          <ellipse cx="100" cy="268" rx="65" ry="8" fill="#2C3E2A" opacity="0.08"/>
+          <g id="pot-body">
+            <path d="M60,160 Q58,155 62,150 L138,150 Q142,155 140,160 L135,230 Q133,240 125,242 L75,242 Q67,240 65,230 Z" fill="#FFE17B" stroke="#2C3E2A" stroke-width="2"/>
+            <rect x="55" y="145" width="90" height="12" rx="4" fill="#FFE17B" stroke="#2C3E2A" stroke-width="2"/>
+            <path d="M70,165 Q68,162 72,158 L82,158 Q80,162 78,165 Z" fill="white" opacity="0.15"/>
+          </g>
+          <g id="face">
+            <g id="eye-left">
+              <circle id="eye-left-open" class="eye-open" cx="82" cy="195" r="4.5" fill="#2C3E2A"/>
+              <path id="eye-left-closed" d="M76,195 Q82,189 88,195" stroke="#2C3E2A" stroke-width="2.5" fill="none" stroke-linecap="round" visibility="hidden"/>
+            </g>
+            <g id="eye-right">
+              <circle id="eye-right-open" class="eye-open" cx="118" cy="195" r="4.5" fill="#2C3E2A"/>
+              <path id="eye-right-closed" d="M112,195 Q118,189 124,195" stroke="#2C3E2A" stroke-width="2.5" fill="none" stroke-linecap="round" visibility="hidden"/>
+            </g>
+            <g id="mouth">
+              <path id="mouth-happy" d="M93,210 Q100,218 107,210" stroke="#2C3E2A" stroke-width="2" fill="none" stroke-linecap="round"/>
+              <path id="mouth-content" d="M95,212 L105,212" stroke="#2C3E2A" stroke-width="2" fill="none" stroke-linecap="round" visibility="hidden"/>
+              <path id="mouth-worried" d="M93,215 Q100,209 107,215" stroke="#2C3E2A" stroke-width="2" fill="none" stroke-linecap="round" visibility="hidden"/>
+              <path id="mouth-sleeping" d="M96,212 Q100,215 104,212 Q100,209 96,212" fill="#2C3E2A" visibility="hidden"/>
+              <path id="mouth-giggling" d="M92,211 Q95,214 98,211 Q101,214 104,211 Q107,214 110,211" stroke="#2C3E2A" stroke-width="1.5" fill="none" stroke-linecap="round" visibility="hidden"/>
+            </g>
+            <g id="blush">
+              <ellipse id="blush-left" cx="74" cy="204" rx="8" ry="5" fill="#F7A8B8" opacity="0.4"/>
+              <ellipse id="blush-right" cx="126" cy="204" rx="8" ry="5" fill="#F7A8B8" opacity="0.4"/>
+            </g>
+            <g id="extras">
+              <text id="extra-zzz" x="130" y="178" font-size="14" fill="#2C3E2A" opacity="0.5" visibility="hidden" font-family="sans-serif">z z</text>
+              <g id="extra-heart" visibility="hidden">
+                <path d="M140,172 C140,168 146,168 146,172 C146,168 152,168 152,172 C152,178 146,182 146,182 C146,182 140,178 140,172" fill="#F7A8B8" opacity="0.8"/>
+              </g>
+            </g>
+          </g>
+          <g id="foliage">
+            <g id="stems">
+              <path d="M95,150 Q90,120 85,95" stroke="#4A8C5C" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+              <path d="M105,148 Q108,110 115,85" stroke="#4A8C5C" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+              <path d="M100,150 Q100,115 95,80" stroke="#4A8C5C" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+              <path d="M110,150 Q120,125 130,105" stroke="#4A8C5C" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+              <path d="M90,150 Q75,130 65,110" stroke="#4A8C5C" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+            </g>
+            <g id="leaf-1" class="sway-1" style="transform-origin: 85px 95px;">
+              <path d="M85,95 Q70,80 60,60 Q65,55 75,58 Q72,50 78,48 Q82,52 80,60 Q88,50 90,55 Q85,65 82,75 Z" fill="#7CAA6D" stroke="#2C3E2A" stroke-width="1.5"/>
+              <ellipse cx="74" cy="68" rx="4" ry="5" fill="#FFF8F0" opacity="0.6"/>
+            </g>
+            <g id="leaf-2" class="sway-2" style="transform-origin: 115px 85px;">
+              <path d="M115,85 Q130,70 140,48 Q135,45 128,50 Q132,40 126,38 Q122,44 125,52 Q115,42 112,48 Q118,58 122,68 Z" fill="#7CAA6D" stroke="#2C3E2A" stroke-width="1.5"/>
+              <ellipse cx="132" cy="55" rx="4" ry="5" fill="#FFF8F0" opacity="0.6"/>
+            </g>
+            <g id="leaf-3" class="sway-3" style="transform-origin: 95px 80px;">
+              <path d="M95,80 Q85,60 80,35 Q86,32 90,38 Q88,28 94,26 Q97,32 95,42 Q102,32 105,38 Q98,50 96,62 Z" fill="#5C9A5E" stroke="#2C3E2A" stroke-width="1.5"/>
+              <ellipse cx="90" cy="48" rx="3.5" ry="5" fill="#FFF8F0" opacity="0.6"/>
+            </g>
+            <g id="leaf-4" class="sway-4" style="transform-origin: 130px 105px;">
+              <path d="M130,105 Q145,90 150,72 Q145,70 140,76 Q143,66 138,65 Q135,70 137,78 Q130,70 128,75 Q134,84 133,92 Z" fill="#8BB87A" stroke="#2C3E2A" stroke-width="1.5"/>
+            </g>
+            <g id="leaf-5" class="sway-5" style="transform-origin: 65px 110px;">
+              <path d="M65,110 Q50,95 42,78 Q48,76 52,82 Q49,72 55,70 Q58,76 56,84 Q62,75 65,80 Q60,90 62,100 Z" fill="#8BB87A" stroke="#2C3E2A" stroke-width="1.5"/>
+            </g>
+          </g>
+        </svg>
+      </div>
+      <div class="plant-name">Monstera</div>
+      <div class="plant-tier">Tier 1 — Inner Circle</div>
+    </div>
+  </div>
+</div>
+
+<div class="shelf">
+  <div class="shelf-label">Friends & Acquaintances</div>
+  <div class="shelf-board">
+    <div class="plant-slot" onclick="bouncePlant(this)">
+      <div class="plant-wrapper">
+        <!-- SUCCULENT (Tier 4) - Inlined SVG -->
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 240" width="200" height="240">
+          <ellipse cx="100" cy="228" rx="50" ry="7" fill="#2C3E2A" opacity="0.08"/>
+          <g id="pot-body">
+            <ellipse cx="100" cy="195" rx="50" ry="35" fill="#F7A8B8" stroke="#2C3E2A" stroke-width="2"/>
+            <ellipse cx="100" cy="168" rx="42" ry="8" fill="#F7A8B8" stroke="#2C3E2A" stroke-width="2"/>
+            <rect x="65" y="218" width="70" height="5" rx="2" fill="#F7A8B8" stroke="#2C3E2A" stroke-width="1.5"/>
+            <ellipse cx="78" cy="188" rx="10" ry="14" fill="white" opacity="0.1" transform="rotate(-15,78,188)"/>
+          </g>
+          <g id="face">
+            <g id="eye-left">
+              <circle id="eye-left-open" class="eye-open" cx="85" cy="192" r="3.5" fill="#2C3E2A"/>
+              <path id="eye-left-closed" d="M80,192 Q85,187 90,192" stroke="#2C3E2A" stroke-width="2" fill="none" stroke-linecap="round" visibility="hidden"/>
+            </g>
+            <g id="eye-right">
+              <circle id="eye-right-open" class="eye-open" cx="115" cy="192" r="3.5" fill="#2C3E2A"/>
+              <path id="eye-right-closed" d="M110,192 Q115,187 120,192" stroke="#2C3E2A" stroke-width="2" fill="none" stroke-linecap="round" visibility="hidden"/>
+            </g>
+            <g id="mouth">
+              <path id="mouth-happy" d="M95,204 Q100,210 105,204" stroke="#2C3E2A" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+              <path id="mouth-content" d="M96,206 L104,206" stroke="#2C3E2A" stroke-width="1.8" fill="none" stroke-linecap="round" visibility="hidden"/>
+              <path id="mouth-worried" d="M95,209 Q100,204 105,209" stroke="#2C3E2A" stroke-width="1.8" fill="none" stroke-linecap="round" visibility="hidden"/>
+              <path id="mouth-sleeping" d="M97,206 Q100,208 103,206 Q100,204 97,206" fill="#2C3E2A" visibility="hidden"/>
+              <path id="mouth-giggling" d="M92,205 Q95,208 98,205 Q101,208 104,205 Q107,208 110,205" stroke="#2C3E2A" stroke-width="1.5" fill="none" stroke-linecap="round" visibility="hidden"/>
+            </g>
+            <g id="blush">
+              <ellipse id="blush-left" cx="77" cy="200" rx="7" ry="4" fill="#D4896A" opacity="0.3"/>
+              <ellipse id="blush-right" cx="123" cy="200" rx="7" ry="4" fill="#D4896A" opacity="0.3"/>
+            </g>
+            <g id="extras">
+              <text id="extra-zzz" x="125" y="175" font-size="12" fill="#2C3E2A" opacity="0.5" visibility="hidden" font-family="sans-serif">z z</text>
+              <g id="extra-heart" visibility="hidden">
+                <path d="M130,175 C130,171 136,171 136,175 C136,171 142,171 142,175 C142,181 136,185 136,185 C136,185 130,181 130,175" fill="#F7A8B8" opacity="0.8"/>
+              </g>
+            </g>
+          </g>
+          <g id="foliage">
+            <g id="leaf-1" class="sway-1" style="transform-origin: 100px 165px;">
+              <ellipse cx="68" cy="152" rx="22" ry="10" fill="#8BB87A" stroke="#2C3E2A" stroke-width="1.5" transform="rotate(-30,68,152)"/>
+            </g>
+            <g id="leaf-2" class="sway-2" style="transform-origin: 100px 165px;">
+              <ellipse cx="132" cy="152" rx="22" ry="10" fill="#8BB87A" stroke="#2C3E2A" stroke-width="1.5" transform="rotate(30,132,152)"/>
+            </g>
+            <g id="leaf-3" class="sway-3" style="transform-origin: 100px 165px;">
+              <ellipse cx="60" cy="140" rx="20" ry="9" fill="#7CAA6D" stroke="#2C3E2A" stroke-width="1.5" transform="rotate(-50,60,140)"/>
+            </g>
+            <g id="leaf-4" class="sway-4" style="transform-origin: 100px 165px;">
+              <ellipse cx="140" cy="140" rx="20" ry="9" fill="#7CAA6D" stroke="#2C3E2A" stroke-width="1.5" transform="rotate(50,140,140)"/>
+            </g>
+            <g id="leaf-5" class="sway-5" style="transform-origin: 100px 155px;">
+              <ellipse cx="80" cy="135" rx="18" ry="8" fill="#7CAA6D" stroke="#2C3E2A" stroke-width="1.5" transform="rotate(-20,80,135)"/>
+            </g>
+            <g id="leaf-6" class="sway-1" style="transform-origin: 100px 155px;">
+              <ellipse cx="120" cy="135" rx="18" ry="8" fill="#7CAA6D" stroke="#2C3E2A" stroke-width="1.5" transform="rotate(20,120,135)"/>
+            </g>
+            <g id="leaf-7" class="sway-2" style="transform-origin: 100px 140px;">
+              <ellipse cx="100" cy="125" rx="12" ry="7" fill="#5C9A5E" stroke="#2C3E2A" stroke-width="1.5"/>
+            </g>
+          </g>
+        </svg>
+      </div>
+      <div class="plant-name">Succulent</div>
+      <div class="plant-tier">Tier 4 — Friend</div>
+    </div>
+
+    <div class="plant-slot" onclick="bouncePlant(this)">
+      <div class="plant-wrapper">
+        <!-- SEEDLING (Tier 5) - Inlined SVG -->
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 200" width="160" height="200">
+          <ellipse cx="80" cy="190" rx="38" ry="6" fill="#2C3E2A" opacity="0.08"/>
+          <g id="pot-body">
+            <path d="M50,130 L55,178 Q56,184 62,185 L98,185 Q104,184 105,178 L110,130 Z" fill="#D4896A" stroke="#2C3E2A" stroke-width="2"/>
+            <rect x="46" y="125" width="68" height="10" rx="3" fill="#D4896A" stroke="#2C3E2A" stroke-width="2"/>
+            <path d="M60,140 Q58,137 62,135 L70,135 Q68,137 66,140 Z" fill="white" opacity="0.12"/>
+            <line x1="50" y1="130" x2="110" y2="130" stroke="#2C3E2A" stroke-width="0.8" opacity="0.3"/>
+          </g>
+          <g id="face">
+            <g id="eye-left">
+              <circle id="eye-left-open" class="eye-open" cx="68" cy="155" r="3" fill="#2C3E2A"/>
+              <path id="eye-left-closed" d="M64,155 Q68,151 72,155" stroke="#2C3E2A" stroke-width="2" fill="none" stroke-linecap="round" visibility="hidden"/>
+            </g>
+            <g id="eye-right">
+              <circle id="eye-right-open" class="eye-open" cx="92" cy="155" r="3" fill="#2C3E2A"/>
+              <path id="eye-right-closed" d="M88,155 Q92,151 96,155" stroke="#2C3E2A" stroke-width="2" fill="none" stroke-linecap="round" visibility="hidden"/>
+            </g>
+            <g id="mouth">
+              <path id="mouth-happy" d="M75,165 Q80,170 85,165" stroke="#2C3E2A" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+              <path id="mouth-content" d="M76,166 L84,166" stroke="#2C3E2A" stroke-width="1.5" fill="none" stroke-linecap="round" visibility="hidden"/>
+              <path id="mouth-worried" d="M75,169 Q80,165 85,169" stroke="#2C3E2A" stroke-width="1.5" fill="none" stroke-linecap="round" visibility="hidden"/>
+              <path id="mouth-sleeping" d="M77,167 Q80,169 83,167 Q80,165 77,167" fill="#2C3E2A" visibility="hidden"/>
+              <path id="mouth-giggling" d="M74,166 Q76,168 78,166 Q80,168 82,166 Q84,168 86,166" stroke="#2C3E2A" stroke-width="1.5" fill="none" stroke-linecap="round" visibility="hidden"/>
+            </g>
+            <g id="blush">
+              <ellipse id="blush-left" cx="61" cy="161" rx="5" ry="3" fill="#F7A8B8" opacity="0.35"/>
+              <ellipse id="blush-right" cx="99" cy="161" rx="5" ry="3" fill="#F7A8B8" opacity="0.35"/>
+            </g>
+            <g id="extras">
+              <text id="extra-zzz" x="98" y="142" font-size="10" fill="#2C3E2A" opacity="0.5" visibility="hidden" font-family="sans-serif">z z</text>
+              <g id="extra-heart" visibility="hidden">
+                <path d="M100,140 C100,136 106,136 106,140 C106,136 112,136 112,140 C112,146 106,150 106,150 C106,150 100,146 100,140" fill="#F7A8B8" opacity="0.8"/>
+              </g>
+            </g>
+          </g>
+          <g id="foliage">
+            <g id="stems">
+              <path d="M80,125 Q80,105 78,90" stroke="#4A8C5C" stroke-width="2" fill="none" stroke-linecap="round"/>
+            </g>
+            <g id="leaf-1" class="sway-1" style="transform-origin: 78px 90px;">
+              <path d="M78,90 Q65,80 62,68 Q68,66 74,72 Q72,64 78,65 Q78,75 78,85 Z" fill="#7CAA6D" stroke="#2C3E2A" stroke-width="1.5"/>
+            </g>
+            <g id="leaf-2" class="sway-2" style="transform-origin: 78px 90px;">
+              <path d="M78,90 Q90,82 95,72 Q90,70 85,74 Q88,66 82,66 Q80,74 78,85 Z" fill="#8BB87A" stroke="#2C3E2A" stroke-width="1.5"/>
+            </g>
+            <ellipse cx="80" cy="128" rx="28" ry="5" fill="#8B6F47" opacity="0.4"/>
+          </g>
+        </svg>
+      </div>
+      <div class="plant-name">Seedling</div>
+      <div class="plant-tier">Tier 5 — Acquaintance</div>
+    </div>
+  </div>
+</div>
+
+<div class="info">
+  <h2>How this works</h2>
+  <p>
+    These are <strong>SVG placeholder plants</strong> with the correct component structure for animation.
+    Each plant has named groups: <code>pot-body</code>, <code>face</code> (with <code>eye-left</code>,
+    <code>eye-right</code>, <code>mouth</code>, <code>blush</code>), and <code>foliage</code>
+    (with individual <code>leaf-N</code> elements). Leaves sway independently with staggered CSS animations.
+    Faces swap expressions by toggling <code>visibility</code> on pre-drawn mouth/eye variants.
+    Click a plant to see the bounce interaction. Use the buttons to change all expressions at once.
+  </p>
+  <p style="margin-top: 12px;">
+    When the illustrator delivers final SVGs with the same group naming convention,
+    they drop in as replacements with <strong>zero animation code changes</strong>.
+  </p>
+</div>
+
+<script>
+function setExpression(expr) {
+  document.querySelectorAll('.controls button').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+
+  document.querySelectorAll('.plant-wrapper svg').forEach(svg => {
+    // Hide all face variants
+    svg.querySelectorAll('[id^="mouth-"], [id^="eye-left-"], [id^="eye-right-"], [id^="extra-"]').forEach(el => {
+      el.setAttribute('visibility', 'hidden');
+    });
+
+    const blushL = svg.querySelector('[id="blush-left"]');
+    const blushR = svg.querySelector('[id="blush-right"]');
+
+    switch(expr) {
+      case 'happy':
+        show(svg, 'eye-left-open');
+        show(svg, 'eye-right-open');
+        show(svg, 'mouth-happy');
+        setBlush(blushL, blushR, 0.4);
+        break;
+      case 'content':
+        show(svg, 'eye-left-closed');
+        show(svg, 'eye-right-closed');
+        show(svg, 'mouth-content');
+        setBlush(blushL, blushR, 0.3);
+        break;
+      case 'sleeping':
+        show(svg, 'eye-left-closed');
+        show(svg, 'eye-right-closed');
+        show(svg, 'mouth-sleeping');
+        show(svg, 'extra-zzz');
+        setBlush(blushL, blushR, 0.2);
+        break;
+      case 'worried':
+        show(svg, 'eye-left-open');
+        show(svg, 'eye-right-open');
+        show(svg, 'mouth-worried');
+        setBlush(blushL, blushR, 0.15);
+        break;
+      case 'winking':
+        show(svg, 'eye-left-open');
+        show(svg, 'eye-right-closed');
+        show(svg, 'mouth-giggling') || show(svg, 'mouth-happy');
+        show(svg, 'extra-heart');
+        setBlush(blushL, blushR, 0.5);
+        break;
+    }
+  });
+}
+
+function show(svg, id) {
+  const el = svg.querySelector(`[id="${id}"]`);
+  if (el) { el.setAttribute('visibility', 'visible'); return true; }
+  return false;
+}
+
+function setBlush(l, r, opacity) {
+  if (l) l.setAttribute('opacity', opacity);
+  if (r) r.setAttribute('opacity', opacity);
+}
+
+function bouncePlant(slot) {
+  const wrapper = slot.querySelector('.plant-wrapper');
+  wrapper.classList.remove('bouncing');
+  void wrapper.offsetWidth;
+  wrapper.classList.add('bouncing');
+
+  const svg = wrapper.querySelector('svg');
+  const heart = svg.querySelector('[id="extra-heart"]');
+  if (heart) {
+    heart.setAttribute('visibility', 'visible');
+    setTimeout(() => heart.setAttribute('visibility', 'hidden'), 800);
+  }
+}
+
+// Set happy as default on load
+document.addEventListener('DOMContentLoaded', () => setExpression('happy'));
+</script>
+</body>
+</html>

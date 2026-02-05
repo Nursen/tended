@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 200" width="160" height="200">
+  <!-- Tended Placeholder Plant: Seedling (Tier 5 - Just sprouting) -->
+
+  <!-- Shadow -->
+  <ellipse cx="80" cy="190" rx="38" ry="6" fill="#2C3E2A" opacity="0.08"/>
+
+  <!-- Pot Body (small classic cylinder) -->
+  <g id="pot-body">
+    <path d="M50,130 L55,178 Q56,184 62,185 L98,185 Q104,184 105,178 L110,130 Z"
+          fill="#D4896A" stroke="#2C3E2A" stroke-width="2"/>
+    <!-- Rim -->
+    <rect x="46" y="125" width="68" height="10" rx="3" fill="#D4896A" stroke="#2C3E2A" stroke-width="2"/>
+    <!-- Highlight -->
+    <path d="M60,140 Q58,137 62,135 L70,135 Q68,137 66,140 Z" fill="white" opacity="0.12"/>
+    <!-- Rim line detail -->
+    <line x1="50" y1="130" x2="110" y2="130" stroke="#2C3E2A" stroke-width="0.8" opacity="0.3"/>
+  </g>
+
+  <!-- Face -->
+  <g id="face">
+    <g id="eye-left">
+      <circle id="eye-left-open" cx="68" cy="155" r="3" fill="#2C3E2A"/>
+      <path id="eye-left-closed" d="M64,155 Q68,151 72,155" stroke="#2C3E2A" stroke-width="2" fill="none" stroke-linecap="round" visibility="hidden"/>
+    </g>
+    <g id="eye-right">
+      <circle id="eye-right-open" cx="92" cy="155" r="3" fill="#2C3E2A"/>
+      <path id="eye-right-closed" d="M88,155 Q92,151 96,155" stroke="#2C3E2A" stroke-width="2" fill="none" stroke-linecap="round" visibility="hidden"/>
+    </g>
+    <g id="mouth">
+      <path id="mouth-happy" d="M75,165 Q80,170 85,165" stroke="#2C3E2A" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <path id="mouth-content" d="M76,166 L84,166" stroke="#2C3E2A" stroke-width="1.5" fill="none" stroke-linecap="round" visibility="hidden"/>
+      <path id="mouth-worried" d="M75,169 Q80,165 85,169" stroke="#2C3E2A" stroke-width="1.5" fill="none" stroke-linecap="round" visibility="hidden"/>
+      <path id="mouth-sleeping" d="M77,167 Q80,169 83,167 Q80,165 77,167" fill="#2C3E2A" visibility="hidden"/>
+    </g>
+    <g id="blush">
+      <ellipse id="blush-left" cx="61" cy="161" rx="5" ry="3" fill="#F7A8B8" opacity="0.35"/>
+      <ellipse id="blush-right" cx="99" cy="161" rx="5" ry="3" fill="#F7A8B8" opacity="0.35"/>
+    </g>
+  </g>
+
+  <!-- Foliage: tiny seedling sprout -->
+  <g id="foliage">
+    <g id="stem-1">
+      <path d="M80,125 Q80,105 78,90" stroke="#4A8C5C" stroke-width="2" fill="none" stroke-linecap="round"/>
+    </g>
+
+    <!-- Two tiny first leaves -->
+    <g id="leaf-1" transform-origin="78 90">
+      <path d="M78,90 Q65,80 62,68 Q68,66 74,72 Q72,64 78,65 Q78,75 78,85 Z"
+            fill="#7CAA6D" stroke="#2C3E2A" stroke-width="1.5"/>
+    </g>
+    <g id="leaf-2" transform-origin="78 90">
+      <path d="M78,90 Q90,82 95,72 Q90,70 85,74 Q88,66 82,66 Q80,74 78,85 Z"
+            fill="#8BB87A" stroke="#2C3E2A" stroke-width="1.5"/>
+    </g>
+
+    <!-- Soil visible at top of pot -->
+    <ellipse cx="80" cy="128" rx="28" ry="5" fill="#8B6F47" opacity="0.4"/>
+  </g>
+</svg>

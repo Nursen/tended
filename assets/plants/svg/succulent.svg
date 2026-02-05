@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 240" width="200" height="240">
+  <!-- Tended Placeholder Plant: Succulent (Tier 4 - Simple, cute) -->
+
+  <!-- Shadow -->
+  <ellipse cx="100" cy="228" rx="50" ry="7" fill="#2C3E2A" opacity="0.08"/>
+
+  <!-- Pot Body (round/bulbous style) -->
+  <g id="pot-body">
+    <ellipse cx="100" cy="195" rx="50" ry="35" fill="#F7A8B8" stroke="#2C3E2A" stroke-width="2"/>
+    <!-- Pot rim -->
+    <ellipse cx="100" cy="168" rx="42" ry="8" fill="#F7A8B8" stroke="#2C3E2A" stroke-width="2"/>
+    <!-- Bottom flat -->
+    <rect x="65" y="218" width="70" height="5" rx="2" fill="#F7A8B8" stroke="#2C3E2A" stroke-width="1.5"/>
+    <!-- Highlight -->
+    <ellipse cx="78" cy="188" rx="10" ry="14" fill="white" opacity="0.1" transform="rotate(-15,78,188)"/>
+  </g>
+
+  <!-- Face -->
+  <g id="face">
+    <g id="eye-left">
+      <circle id="eye-left-open" cx="85" cy="192" r="3.5" fill="#2C3E2A"/>
+      <path id="eye-left-closed" d="M80,192 Q85,187 90,192" stroke="#2C3E2A" stroke-width="2" fill="none" stroke-linecap="round" visibility="hidden"/>
+    </g>
+    <g id="eye-right">
+      <circle id="eye-right-open" cx="115" cy="192" r="3.5" fill="#2C3E2A"/>
+      <path id="eye-right-closed" d="M110,192 Q115,187 120,192" stroke="#2C3E2A" stroke-width="2" fill="none" stroke-linecap="round" visibility="hidden"/>
+    </g>
+    <g id="mouth">
+      <path id="mouth-happy" d="M95,204 Q100,210 105,204" stroke="#2C3E2A" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+      <path id="mouth-content" d="M96,206 L104,206" stroke="#2C3E2A" stroke-width="1.8" fill="none" stroke-linecap="round" visibility="hidden"/>
+      <path id="mouth-worried" d="M95,209 Q100,204 105,209" stroke="#2C3E2A" stroke-width="1.8" fill="none" stroke-linecap="round" visibility="hidden"/>
+      <path id="mouth-sleeping" d="M97,206 Q100,208 103,206 Q100,204 97,206" fill="#2C3E2A" visibility="hidden"/>
+    </g>
+    <g id="blush">
+      <ellipse id="blush-left" cx="77" cy="200" rx="7" ry="4" fill="#D4896A" opacity="0.3"/>
+      <ellipse id="blush-right" cx="123" cy="200" rx="7" ry="4" fill="#D4896A" opacity="0.3"/>
+    </g>
+  </g>
+
+  <!-- Foliage: compact rosette succulent -->
+  <g id="foliage">
+    <!-- Bottom ring of leaves -->
+    <g id="leaf-1" transform-origin="100 165">
+      <ellipse cx="68" cy="152" rx="22" ry="10" fill="#8BB87A" stroke="#2C3E2A" stroke-width="1.5" transform="rotate(-30,68,152)"/>
+    </g>
+    <g id="leaf-2" transform-origin="100 165">
+      <ellipse cx="132" cy="152" rx="22" ry="10" fill="#8BB87A" stroke="#2C3E2A" stroke-width="1.5" transform="rotate(30,132,152)"/>
+    </g>
+    <g id="leaf-3" transform-origin="100 165">
+      <ellipse cx="60" cy="140" rx="20" ry="9" fill="#7CAA6D" stroke="#2C3E2A" stroke-width="1.5" transform="rotate(-50,60,140)"/>
+    </g>
+    <g id="leaf-4" transform-origin="100 165">
+      <ellipse cx="140" cy="140" rx="20" ry="9" fill="#7CAA6D" stroke="#2C3E2A" stroke-width="1.5" transform="rotate(50,140,140)"/>
+    </g>
+
+    <!-- Middle ring -->
+    <g id="leaf-5" transform-origin="100 155">
+      <ellipse cx="80" cy="135" rx="18" ry="8" fill="#7CAA6D" stroke="#2C3E2A" stroke-width="1.5" transform="rotate(-20,80,135)"/>
+    </g>
+    <g id="leaf-6" transform-origin="100 155">
+      <ellipse cx="120" cy="135" rx="18" ry="8" fill="#7CAA6D" stroke="#2C3E2A" stroke-width="1.5" transform="rotate(20,120,135)"/>
+    </g>
+
+    <!-- Center rosette -->
+    <g id="leaf-7" transform-origin="100 140">
+      <ellipse cx="100" cy="125" rx="12" ry="7" fill="#5C9A5E" stroke="#2C3E2A" stroke-width="1.5"/>
+    </g>
+  </g>
+</svg>

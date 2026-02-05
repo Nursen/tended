@@ -1,0 +1,40 @@
+.plant-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--space-4);
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  text-decoration: none;
+  transition: all var(--duration-normal) var(--ease-out);
+}
+
+.plant-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.plant-card:hover .plant-placeholder {
+  animation: bounce 0.6s var(--ease-bounce);
+}
+
+.plant-visual {
+  margin-bottom: var(--space-2);
+}
+
+.plant-info {
+  text-align: center;
+}
+
+.plant-name {
+  display: block;
+  font-family: var(--font-heading);
+  font-weight: var(--font-medium);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-1);
+}
+
+.plant-status {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}

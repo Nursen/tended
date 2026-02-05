@@ -1,0 +1,532 @@
+/**
+ * Tended Design Tokens — Cozy Game Edition
+ * Use these CSS custom properties for consistent implementation
+ * Last updated: February 5, 2026
+ */
+
+:root {
+  /* ============================================
+     COLOR PALETTE
+     ============================================ */
+
+  /* Brand Core */
+  --color-primary: #7CAA6D;
+  --color-primary-hover: #6A9A5E;
+  --color-primary-active: #5D8A52;
+
+  --color-secondary: #D4896A;
+  --color-secondary-hover: #C47A5C;
+  --color-secondary-active: #B56B4F;
+
+  --color-tertiary: #FFF8E7;
+
+  /* Accents */
+  --color-bloom-pink: #F7A8B8;
+  --color-seedling-yellow: #FFE17B;
+  --color-sky-blue: #A8D5E2;
+  --color-lavender: #B8A8D9;
+
+  /* Surfaces */
+  --color-background: #F5F1E8;
+  --color-surface: #FFFFFF;
+  --color-border: #E8DCC8;
+
+  /* Text */
+  --color-text-primary: #2C3E2A;
+  --color-text-secondary: #6B7569;
+  --color-text-tertiary: #9BA199;
+
+  /* Health Status */
+  --color-thriving: #7CAA6D;
+  --color-healthy: #9BC085;
+  --color-cooling: #D4C47E;
+  --color-at-risk: #D8A876;
+  --color-dormant: #B8AFA4;
+
+  /* Seasonal (Spring default, override for other seasons) */
+  --season-primary: var(--color-primary);
+  --season-accent: var(--color-bloom-pink);
+
+  /* ============================================
+     TYPOGRAPHY
+     ============================================ */
+
+  /* Font Families */
+  --font-heading: 'Fredoka', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-accent: 'Caveat', cursive;
+
+  /* Font Sizes */
+  --text-h1: 32px;
+  --text-h2: 24px;
+  --text-h3: 20px;
+  --text-h4: 16px;
+  --text-body-large: 16px;
+  --text-body: 14px;
+  --text-body-small: 12px;
+  --text-label: 14px;
+
+  /* Line Heights */
+  --line-height-h1: 38px;
+  --line-height-h2: 29px;
+  --line-height-h3: 24px;
+  --line-height-h4: 19px;
+  --line-height-body-large: 24px;
+  --line-height-body: 21px;
+  --line-height-body-small: 18px;
+  --line-height-label: 20px;
+
+  /* Font Weights */
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+
+  /* ============================================
+     SPACING (8px base grid)
+     ============================================ */
+
+  --space-xxs: 4px;
+  --space-xs: 8px;
+  --space-s: 12px;
+  --space-m: 16px;
+  --space-l: 24px;
+  --space-xl: 32px;
+  --space-xxl: 48px;
+
+  /* ============================================
+     BORDER RADIUS
+     ============================================ */
+
+  --radius-card: 16px;
+  --radius-button: 12px;
+  --radius-button-small: 8px;
+  --radius-input: 10px;
+  --radius-modal: 20px;
+  --radius-chip: 20px;
+  --radius-circle: 50%;
+
+  /* ============================================
+     SHADOWS
+     ============================================ */
+
+  --shadow-card-rest:
+    0px 2px 8px rgba(44, 62, 42, 0.08),
+    0px 1px 2px rgba(44, 62, 42, 0.04);
+
+  --shadow-card-hover:
+    0px 4px 16px rgba(44, 62, 42, 0.12),
+    0px 2px 4px rgba(44, 62, 42, 0.06);
+
+  --shadow-button-primary:
+    0px 2px 4px rgba(124, 170, 109, 0.3);
+
+  --shadow-button-primary-hover:
+    0px 4px 8px rgba(124, 170, 109, 0.4);
+
+  --shadow-button-active:
+    inset 0px 2px 4px rgba(44, 62, 42, 0.15);
+
+  --shadow-modal:
+    0px 16px 48px rgba(44, 62, 42, 0.16),
+    0px 4px 12px rgba(44, 62, 42, 0.08);
+
+  --shadow-floating-action:
+    0px 4px 12px rgba(124, 170, 109, 0.4);
+
+  /* ============================================
+     ANIMATION TIMING
+     ============================================ */
+
+  /* Durations */
+  --duration-fast: 200ms;
+  --duration-normal: 300ms;
+  --duration-slow: 400ms;
+  --duration-slower: 500ms;
+  --duration-slowest: 600ms;
+  --duration-breath: 2000ms;
+  --duration-sway: 3000ms;
+
+  /* Easing Curves */
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1); /* Gentle settle */
+  --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55); /* Happy spring */
+  --ease-in-out: cubic-bezier(0.45, 0, 0.55, 1); /* Natural rhythm */
+  --ease-dreamy: cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Dreamy drift */
+
+  /* ============================================
+     Z-INDEX LAYERS
+     ============================================ */
+
+  --z-base: 0;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-overlay: 300;
+  --z-modal: 400;
+  --z-toast: 500;
+
+  /* ============================================
+     BREAKPOINTS (for reference)
+     ============================================ */
+
+  --breakpoint-mobile: 375px;
+  --breakpoint-tablet: 768px;
+  --breakpoint-desktop: 1024px;
+  --breakpoint-wide: 1440px;
+}
+
+/* ============================================
+   SEASONAL THEME OVERRIDES
+   ============================================ */
+
+/* Spring (default) — already set above */
+
+/* Summer Theme */
+[data-season="summer"] {
+  --season-primary: #6A9A5E; /* Deeper green */
+  --season-accent: #FFD65C; /* Golden yellow */
+  --color-background: #FFF9E6; /* Warmer background */
+  --saturation-boost: 1.15; /* +15% saturation on plants */
+}
+
+/* Autumn Theme */
+[data-season="autumn"] {
+  --season-primary: #C47B5C; /* Burnt orange */
+  --season-accent: #E6B566; /* Golden yellow */
+  --color-background: #F5EBE0; /* Warm neutral */
+  --color-border: #D4C4B0;
+}
+
+/* Winter Theme */
+[data-season="winter"] {
+  --season-primary: #5C8D73; /* Evergreen */
+  --season-accent: #D4E4E8; /* Frost blue */
+  --color-background: #FAFBFC; /* Winter white */
+  --color-border: #E0E8EA;
+}
+
+/* ============================================
+   TYPOGRAPHY CLASSES
+   ============================================ */
+
+h1, .heading-1 {
+  font-family: var(--font-heading);
+  font-size: var(--text-h1);
+  line-height: var(--line-height-h1);
+  font-weight: var(--weight-medium);
+  color: var(--color-text-primary);
+}
+
+h2, .heading-2 {
+  font-family: var(--font-heading);
+  font-size: var(--text-h2);
+  line-height: var(--line-height-h2);
+  font-weight: var(--weight-medium);
+  color: var(--color-text-primary);
+}
+
+h3, .heading-3 {
+  font-family: var(--font-heading);
+  font-size: var(--text-h3);
+  line-height: var(--line-height-h3);
+  font-weight: var(--weight-regular);
+  color: var(--color-text-primary);
+}
+
+h4, .heading-4 {
+  font-family: var(--font-heading);
+  font-size: var(--text-h4);
+  line-height: var(--line-height-h4);
+  font-weight: var(--weight-regular);
+  color: var(--color-text-primary);
+}
+
+body, .body-text {
+  font-family: var(--font-body);
+  font-size: var(--text-body);
+  line-height: var(--line-height-body);
+  font-weight: var(--weight-regular);
+  color: var(--color-text-primary);
+}
+
+.body-large {
+  font-size: var(--text-body-large);
+  line-height: var(--line-height-body-large);
+}
+
+.body-small {
+  font-size: var(--text-body-small);
+  line-height: var(--line-height-body-small);
+  color: var(--color-text-secondary);
+}
+
+.label {
+  font-family: var(--font-body);
+  font-size: var(--text-label);
+  line-height: var(--line-height-label);
+  font-weight: var(--weight-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.handwritten {
+  font-family: var(--font-accent);
+  font-size: 18px;
+  line-height: 1.4;
+  color: var(--color-text-secondary);
+}
+
+/* ============================================
+   BUTTON STYLES
+   ============================================ */
+
+.button-primary {
+  background: var(--color-primary);
+  color: #FFFFFF;
+  padding: var(--space-s) var(--space-l);
+  border-radius: var(--radius-button);
+  font-family: var(--font-body);
+  font-size: var(--text-body);
+  font-weight: var(--weight-medium);
+  box-shadow: var(--shadow-button-primary);
+  border: none;
+  cursor: pointer;
+  transition: all var(--duration-normal) var(--ease-soft);
+}
+
+.button-primary:hover {
+  background: var(--color-primary-hover);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-button-primary-hover);
+}
+
+.button-primary:active {
+  transform: scale(0.98);
+  box-shadow: var(--shadow-button-active);
+}
+
+.button-secondary {
+  background: var(--color-background);
+  color: var(--color-text-primary);
+  border: 2px solid var(--color-border);
+  padding: var(--space-s) var(--space-l);
+  border-radius: var(--radius-button);
+  font-family: var(--font-body);
+  font-size: var(--text-body);
+  font-weight: var(--weight-medium);
+  cursor: pointer;
+  transition: all var(--duration-normal) var(--ease-soft);
+}
+
+.button-secondary:hover {
+  background: var(--color-surface);
+  border-color: var(--color-primary);
+}
+
+.button-secondary:active {
+  transform: scale(0.98);
+}
+
+.button-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-circle);
+  background: var(--color-primary);
+  color: #FFFFFF;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-floating-action);
+  transition: transform var(--duration-normal) var(--ease-soft);
+}
+
+.button-icon:hover {
+  transform: scale(1.05);
+}
+
+.button-icon:active {
+  transform: scale(0.95);
+}
+
+/* ============================================
+   CARD STYLES
+   ============================================ */
+
+.card {
+  background: var(--color-surface);
+  border-radius: var(--radius-card);
+  padding: var(--space-m);
+  box-shadow: var(--shadow-card-rest);
+  transition:
+    transform var(--duration-normal) var(--ease-soft),
+    box-shadow var(--duration-normal) var(--ease-soft);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-card-hover);
+}
+
+.card:active {
+  transform: scale(0.98);
+}
+
+/* ============================================
+   INPUT STYLES
+   ============================================ */
+
+.input {
+  background: var(--color-surface);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-input);
+  padding: var(--space-s) var(--space-m);
+  font-family: var(--font-body);
+  font-size: var(--text-body);
+  color: var(--color-text-primary);
+  transition: all var(--duration-normal) var(--ease-soft);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0px 0px 0px 3px rgba(124, 170, 109, 0.1);
+}
+
+.input.error {
+  border-color: var(--color-at-risk);
+}
+
+/* ============================================
+   ANIMATION KEYFRAMES
+   ============================================ */
+
+/* Plant Sway */
+@keyframes plant-sway {
+  0%, 100% { transform: rotate(-1deg); }
+  50% { transform: rotate(1deg); }
+}
+
+.plant-idle {
+  animation: plant-sway var(--duration-sway) var(--ease-in-out) infinite;
+}
+
+/* Leaf Rustle (on hover) */
+@keyframes leaf-rustle {
+  0% { transform: rotate(0deg); }
+  25% { transform: rotate(-2deg); }
+  75% { transform: rotate(2deg); }
+  100% { transform: rotate(0deg); }
+}
+
+.leaf:hover {
+  animation: leaf-rustle var(--duration-slow) var(--ease-bounce);
+}
+
+/* Flower Bloom */
+@keyframes flower-bloom {
+  0% {
+    transform: scale(0.9);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1.0);
+    opacity: 1.0;
+  }
+}
+
+.flower-bloom {
+  animation: flower-bloom var(--duration-slowest) var(--ease-bounce);
+}
+
+/* Skeleton Loader */
+@keyframes skeleton-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.6; }
+}
+
+.skeleton {
+  background: var(--color-tertiary);
+  animation: skeleton-pulse 1.5s var(--ease-in-out) infinite;
+}
+
+/* Glow Effect (thriving plants) */
+@keyframes glow-pulse {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(124, 170, 109, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(124, 170, 109, 0.5);
+  }
+}
+
+.plant-thriving {
+  animation: glow-pulse var(--duration-breath) var(--ease-in-out) infinite;
+}
+
+/* Sparkle Particles (achievement) */
+@keyframes sparkle-rise {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-40px) scale(0.5);
+    opacity: 0;
+  }
+}
+
+.sparkle-particle {
+  animation: sparkle-rise 800ms var(--ease-soft) forwards;
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Color Utilities */
+.text-primary { color: var(--color-text-primary); }
+.text-secondary { color: var(--color-text-secondary); }
+.text-tertiary { color: var(--color-text-tertiary); }
+
+.bg-primary { background: var(--color-primary); }
+.bg-surface { background: var(--color-surface); }
+.bg-background { background: var(--color-background); }
+
+/* Spacing Utilities */
+.p-xs { padding: var(--space-xs); }
+.p-s { padding: var(--space-s); }
+.p-m { padding: var(--space-m); }
+.p-l { padding: var(--space-l); }
+.p-xl { padding: var(--space-xl); }
+
+.m-xs { margin: var(--space-xs); }
+.m-s { margin: var(--space-s); }
+.m-m { margin: var(--space-m); }
+.m-l { margin: var(--space-l); }
+.m-xl { margin: var(--space-xl); }
+
+/* ============================================
+   GOOGLE FONTS IMPORT
+   ============================================ */
+
+/* Add this to your HTML <head>:
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500&family=Inter:wght@400;500;600&family=Caveat:wght@400;500&display=swap" rel="stylesheet">
+
+*/
