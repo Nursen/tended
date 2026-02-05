@@ -1,0 +1,236 @@
+.bulletin-board {
+  position: relative;
+  width: 220px;
+  min-height: 280px;
+  background: #C4956B;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow:
+    inset 0 2px 4px rgba(0, 0, 0, 0.1),
+    0 4px 12px rgba(44, 62, 42, 0.15);
+  border: 8px solid #8B6B4A;
+}
+
+.cork-texture {
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 20% 30%, #D4A574 1px, transparent 1px),
+    radial-gradient(circle at 60% 70%, #B8875A 1px, transparent 1px),
+    radial-gradient(circle at 80% 20%, #D4A574 1px, transparent 1px);
+  background-size: 20px 20px;
+  opacity: 0.4;
+  pointer-events: none;
+  border-radius: 4px;
+}
+
+/* Decorative pins */
+.pin {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  z-index: 10;
+}
+
+.pin-red { background: linear-gradient(135deg, #E57373 0%, #C62828 100%); }
+.pin-blue { background: linear-gradient(135deg, #64B5F6 0%, #1565C0 100%); }
+.pin-yellow { background: linear-gradient(135deg, #FFD54F 0%, #F9A825 100%); }
+.pin-green { background: linear-gradient(135deg, #81C784 0%, #2E7D32 100%); }
+
+/* Mini calendar */
+.mini-calendar {
+  background: #FFFEF8;
+  border-radius: 6px;
+  padding: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  position: relative;
+  z-index: 1;
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px dashed #DDD;
+}
+
+.calendar-month {
+  font-weight: 600;
+  color: #2C3E2A;
+  font-size: 0.85rem;
+}
+
+.calendar-year {
+  font-size: 0.7rem;
+  color: #888;
+}
+
+.calendar-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  margin-bottom: 4px;
+}
+
+.weekday {
+  text-align: center;
+  font-size: 0.6rem;
+  color: #999;
+  font-weight: 500;
+}
+
+.calendar-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.day {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  font-size: 0.65rem;
+  color: #555;
+  position: relative;
+  cursor: default;
+}
+
+.day.empty {
+  visibility: hidden;
+}
+
+.day.today {
+  font-weight: 700;
+  color: #7CAA6D;
+}
+
+.day.has-birthday {
+  cursor: pointer;
+  font-weight: 600;
+  color: #D4896A;
+}
+
+.birthday-circle {
+  position: absolute;
+  inset: 1px;
+  border: 2px solid #F7A8B8;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* Birthday tooltip */
+.birthday-tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: white;
+  padding: 8px 12px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  z-index: 100;
+  white-space: nowrap;
+  margin-bottom: 8px;
+}
+
+.tooltip-emoji {
+  font-size: 1.2rem;
+}
+
+.tooltip-name {
+  font-weight: 600;
+  color: #2C3E2A;
+  font-size: 0.85rem;
+}
+
+.tooltip-days {
+  font-size: 0.7rem;
+  color: #D4896A;
+  font-weight: 500;
+}
+
+/* Pinned notes */
+.pinned-note {
+  position: absolute;
+  background: #FFF9C4;
+  padding: 8px 10px;
+  border-radius: 2px;
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.15);
+  font-size: 0.7rem;
+  color: #555;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.pinned-note .note-pin {
+  position: absolute;
+  top: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 8px;
+  height: 8px;
+  background: linear-gradient(135deg, #E57373 0%, #C62828 100%);
+  border-radius: 50%;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.note-1 {
+  bottom: 55px;
+  right: 12px;
+}
+
+.note-secret {
+  top: 35px;
+  left: 8px;
+  background: #E8F5E9;
+  font-size: 0.65rem;
+}
+
+/* Upcoming birthdays list */
+.upcoming-list {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 0.65rem;
+}
+
+.upcoming-title {
+  display: block;
+  font-weight: 600;
+  color: #888;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  font-size: 0.55rem;
+  letter-spacing: 0.5px;
+}
+
+.upcoming-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #555;
+}
+
+.upcoming-dot {
+  width: 4px;
+  height: 4px;
+  background: #F7A8B8;
+  border-radius: 50%;
+}
+
+.upcoming-name {
+  font-weight: 500;
+}
