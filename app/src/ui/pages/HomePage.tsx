@@ -6,6 +6,8 @@ export function HomePage() {
   const friends = useFriendStore((state) => state.friends);
   const getAllFriendsHealth = useFriendStore((state) => state.getAllFriendsHealth);
   const getUpcomingBirthdays = useFriendStore((state) => state.getUpcomingBirthdays);
+  const loadDemoData = useFriendStore((state) => state.loadDemoData);
+  const clearAllData = useFriendStore((state) => state.clearAllData);
 
   const healthMetrics = getAllFriendsHealth();
   const upcomingBirthdays = getUpcomingBirthdays(14);
@@ -75,10 +77,23 @@ export function HomePage() {
           <div className="empty-illustration">🌱</div>
           <h3>Your garden is empty</h3>
           <p>Add your first friend to start tending your relationships.</p>
-          <a href="/friends" className="btn btn-primary">
-            Plant your first friend
-          </a>
+          <div className="empty-actions">
+            <a href="/friends" className="btn btn-primary">
+              Plant your first friend
+            </a>
+            <button className="btn btn-secondary" onClick={loadDemoData}>
+              Load demo garden
+            </button>
+          </div>
         </section>
+      )}
+
+      {friends.length > 0 && (
+        <div className="demo-controls">
+          <button className="btn-text" onClick={clearAllData}>
+            Reset garden
+          </button>
+        </div>
       )}
     </div>
   );

@@ -69,16 +69,68 @@
   gap: var(--space-2);
 }
 
+.quick-log-buttons .btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.btn-emoji {
+  font-size: var(--text-lg);
+}
+
+.btn.just-logged {
+  background: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+}
+
+.log-toast {
+  background: var(--color-primary);
+  color: white;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-full);
+  display: inline-block;
+  margin-bottom: var(--space-3);
+  font-weight: var(--font-medium);
+}
+
 .interaction-list {
   list-style: none;
 }
 
 .interaction-item {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: var(--space-3);
   padding: var(--space-3) 0;
   border-bottom: 1px solid rgba(44, 62, 42, 0.06);
+}
+
+.interaction-item:hover .delete-btn {
+  opacity: 1;
+}
+
+.interaction-emoji {
+  font-size: var(--text-lg);
+}
+
+.delete-btn {
+  margin-left: auto;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--color-text-muted);
+  font-size: var(--text-lg);
+  line-height: 1;
+  opacity: 0;
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.delete-btn:hover {
+  background: var(--color-health-at-risk);
+  color: white;
 }
 
 .interaction-item:last-child {

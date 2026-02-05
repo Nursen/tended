@@ -5,15 +5,22 @@
 }
 
 .header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: var(--space-4) var(--space-6);
-  background: var(--color-surface);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
   border-bottom: 1px solid rgba(44, 62, 42, 0.08);
   position: sticky;
   top: 0;
   z-index: 100;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-4) var(--space-6);
+  max-width: 1000px;
+  margin: 0 auto;
+  width: 100%;
 }
 
 .logo {
@@ -60,8 +67,17 @@
 
 .main {
   flex: 1;
+  display: flex;
+  justify-content: center;
   padding: var(--space-6);
-  max-width: 1200px;
-  margin: 0 auto;
+}
+
+.main-content {
   width: 100%;
+  max-width: 900px;
+}
+
+/* Glass card effect for content areas */
+.main-content > * {
+  position: relative;
 }

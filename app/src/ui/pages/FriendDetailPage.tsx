@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useFriendStore } from '../../core/stores/friendStore';
 import { getLastContactDescription } from '../../core/services/healthService';
@@ -23,20 +24,35 @@ const INTERACTION_LABELS: Record<InteractionType, string> = {
   group_hangout: 'Group Hangout',
 };
 
+const INTERACTION_EMOJIS: Record<InteractionType, string> = {
+  text: '💬',
+  call: '📞',
+  hangout: '🤝',
+  event: '🎉',
+  deep_convo: '💭',
+  helped: '🤲',
+  group_hangout: '👥',
+};
+
 export function FriendDetailPage() {
   const { friendId } = useParams<{ friendId: string }>();
   const navigate = useNavigate();
+  const [justLogged, setJustLogged] = useState<string | null>(null);
 
-  const getFriend = useFriendStore((state) => state.getFriend);
-  const getFriendHealth = useFriendStore((state) => state.getFriendHealth);
-  const getInteractionsForFriend = useFriendStore((state) => state.getInteractionsForFriend);
-  const getPlantAppearance = useFriendStore((state) => state.getPlantAppearance);
+  // Use reactive selectors
+  const friends = useFriendStore((state) => state.friends);
+  const interactions = useFriendStore((state) => state.interactions);
+  const plantAppearances = useFriendStore((state) => state.plantAppearances);
   const logInteraction = useFriendStore((state) => state.logInteraction);
+  const deleteInteraction = useFriendStore((state) => state.deleteInteraction);
+  const getFriendHealth = useFriendStore((state) => state.getFriendHealth);
 
-  const friend = friendId ? getFriend(friendId) : undefined;
+  const friend = friends.find((f) => f.id === friendId);
+  const friendInteractions = interactions
+    .filter((i) => i.friendId === friendId)
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  const plantAppearance = friendId ? plantAppearances[friendId] : null;
   const health = friendId ? getFriendHealth(friendId) : null;
-  const interactions = friendId ? getInteractionsForFriend(friendId) : [];
-  const plantAppearance = friendId ? getPlantAppearance(friendId) : null;
 
   if (!friend) {
     return (
@@ -51,6 +67,8 @@ export function FriendDetailPage() {
 
   const handleQuickLog = (type: InteractionType) => {
     logInteraction(friend.id, type);
+    setJustLogged(type);
+    setTimeout(() => setJustLogged(null), 2000);
   };
 
   return (
@@ -83,13 +101,19 @@ export function FriendDetailPage() {
 
       <section className="quick-log section">
         <h3>Log an interaction</h3>
+        {justLogged && (
+          <div className="log-toast animate-fade-in">
+            Logged {INTERACTION_LABELS[justLogged as InteractionType].toLowerCase()}!
+          </div>
+        )}
         <div className="quick-log-buttons">
           {(['text', 'call', 'hangout', 'deep_convo'] as InteractionType[]).map((type) => (
             <button
               key={type}
-              className="btn btn-secondary"
+              className={`btn btn-secondary ${justLogged === type ? 'just-logged' : ''}`}
               onClick={() => handleQuickLog(type)}
             >
+              <span className="btn-emoji">{INTERACTION_EMOJIS[type]}</span>
               {INTERACTION_LABELS[type]}
             </button>
           ))}
@@ -98,10 +122,16 @@ export function FriendDetailPage() {
 
       <section className="history section">
         <h3>Recent history</h3>
-        {interactions.length > 0 ? (
+        {friendInteractions.length > 0 ? (
           <ul className="interaction-list">
-            {interactions.slice(0, 10).map((interaction) => (
-              <li key={interaction.id} className="interaction-item">
+            {friendInteractions.slice(0, 10).map((interaction, index) => (
+              <li
+                key={interaction.id}
+                className={`interaction-item ${index === 0 && justLogged ? 'animate-fade-in' : ''}`}
+              >
+                <span className="interaction-emoji">
+                  {INTERACTION_EMOJIS[interaction.type]}
+                </span>
                 <span className="interaction-type">
                   {INTERACTION_LABELS[interaction.type]}
                 </span>
@@ -114,6 +144,13 @@ export function FriendDetailPage() {
                 {interaction.note && (
                   <p className="interaction-note">{interaction.note}</p>
                 )}
+                <button
+                  className="delete-btn"
+                  onClick={() => deleteInteraction(interaction.id)}
+                  aria-label="Delete interaction"
+                >
+                  ×
+                </button>
               </li>
             ))}
           </ul>

@@ -74,3 +74,26 @@
   color: var(--color-text-secondary);
   margin-bottom: var(--space-6);
 }
+
+.empty-actions {
+  display: flex;
+  gap: var(--space-3);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.demo-controls {
+  margin-top: var(--space-8);
+  text-align: center;
+}
+
+.btn-text {
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+  padding: var(--space-2);
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+.btn-text:hover {
+  color: var(--color-health-at-risk);
+}

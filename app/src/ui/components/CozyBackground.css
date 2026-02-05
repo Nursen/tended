@@ -1,0 +1,58 @@
+.cozy-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  overflow: hidden;
+}
+
+.background-svg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Cloud animations */
+.clouds .cloud {
+  animation: cloudFloat 30s ease-in-out infinite;
+}
+
+.cloud-1 {
+  animation-delay: 0s;
+  animation-duration: 35s;
+}
+
+.cloud-2 {
+  animation-delay: -10s;
+  animation-duration: 40s;
+}
+
+.cloud-3 {
+  animation-delay: -20s;
+  animation-duration: 45s;
+}
+
+@keyframes cloudFloat {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(30px);
+  }
+}
+
+/* Subtle shimmer on window */
+.window rect[fill="url(#skyGradient)"] {
+  animation: skyShimmer 8s ease-in-out infinite;
+}
+
+@keyframes skyShimmer {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.95;
+  }
+}

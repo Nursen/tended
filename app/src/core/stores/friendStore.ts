@@ -65,8 +65,13 @@ interface FriendStore {
     initiatedBy?: InitiatedBy,
     date?: Date
   ) => Interaction;
+  deleteInteraction: (interactionId: string) => void;
   getInteractionsForFriend: (friendId: string) => Interaction[];
   getRecentInteractions: (limit?: number) => Interaction[];
+
+  // Demo mode
+  loadDemoData: () => void;
+  clearAllData: () => void;
 
   // Health metrics (computed)
   getFriendHealth: (friendId: string) => FriendHealthMetrics | null;
@@ -233,6 +238,56 @@ export const useFriendStore = create<FriendStore>()(
             (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
           )
           .slice(0, limit);
+      },
+
+      deleteInteraction: (interactionId) => {
+        set((state) => ({
+          interactions: state.interactions.filter((i) => i.id !== interactionId),
+        }));
+      },
+
+      // ─────────────────────────────────────────────────────────────
+      // DEMO MODE
+      // ─────────────────────────────────────────────────────────────
+
+      loadDemoData: () => {
+        const demoFriends = [
+          { name: 'Maya Chen', tier: 1 as Tier, birthday: '1992-03-15' },
+          { name: 'James Wilson', tier: 1 as Tier, birthday: '1990-07-22' },
+          { name: 'Sofia Rodriguez', tier: 2 as Tier, birthday: '1994-11-08' },
+          { name: 'Alex Kim', tier: 2 as Tier },
+          { name: 'Emma Thompson', tier: 3 as Tier, birthday: '1991-02-14' },
+          { name: 'Marcus Johnson', tier: 3 as Tier },
+          { name: 'Priya Patel', tier: 4 as Tier },
+          { name: 'Jordan Lee', tier: 4 as Tier },
+          { name: 'Sam Rivera', tier: 5 as Tier },
+          { name: 'Taylor Swift', tier: 5 as Tier },
+        ];
+
+        const interactionTypes: InteractionType[] = ['text', 'call', 'hangout', 'deep_convo', 'event', 'helped'];
+
+        demoFriends.forEach((demo, index) => {
+          const friend = get().addFriend(demo.name, demo.tier);
+
+          // Add birthday if present
+          if (demo.birthday) {
+            get().updateFriend(friend.id, { birthday: demo.birthday });
+          }
+
+          // Add some interactions with varying recency based on tier
+          const interactionCount = Math.max(1, 6 - demo.tier);
+          for (let i = 0; i < interactionCount; i++) {
+            const daysAgo = Math.floor(Math.random() * (demo.tier * 20)) + (index % 3 === 0 ? 30 : 0);
+            const date = new Date();
+            date.setDate(date.getDate() - daysAgo);
+            const type = interactionTypes[Math.floor(Math.random() * interactionTypes.length)];
+            get().logInteraction(friend.id, type, undefined, Math.random() > 0.5 ? 'me' : 'them', date);
+          }
+        });
+      },
+
+      clearAllData: () => {
+        set({ friends: [], interactions: [], plantAppearances: {} });
       },
 
       // ─────────────────────────────────────────────────────────────
