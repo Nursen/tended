@@ -17,15 +17,16 @@ export function NeedsLoveShelf() {
   const [isWatering, setIsWatering] = useState(false);
   const [wateredPlant, setWateredPlant] = useState<string | null>(null);
 
-  // Get plants that need attention
+  // Get plants that need attention - with proper type narrowing
   const needsLove = healthMetrics
     .filter((h) => h.healthStatus === 'at_risk' || h.healthStatus === 'cooling')
-    .map((h) => ({
-      health: h,
-      friend: friends.find((f) => f.id === h.friendId),
-      appearance: plantAppearances[h.friendId],
-    }))
-    .filter((item) => item.friend && item.appearance)
+    .map((h) => {
+      const friend = friends.find((f) => f.id === h.friendId);
+      const appearance = plantAppearances[h.friendId];
+      if (!friend || !appearance) return null;
+      return { health: h, friend, appearance };
+    })
+    .filter((item): item is NonNullable<typeof item> => item !== null)
     .slice(0, 4);
 
   const handleWater = (friendId: string) => {
@@ -99,12 +100,12 @@ export function NeedsLoveShelf() {
         <div className="wilting-plants">
           {needsLove.map(({ friend, health, appearance }, index) => (
             <motion.div
-              key={friend!.id}
-              className={`wilting-plant ${wateredPlant === friend!.id ? 'being-watered' : ''}`}
+              key={friend.id}
+              className={`wilting-plant ${wateredPlant === friend.id ? 'being-watered' : ''}`}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 + index * 0.1 }}
-              onClick={() => handleWater(friend!.id)}
+              onClick={() => handleWater(friend.id)}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
@@ -121,7 +122,7 @@ export function NeedsLoveShelf() {
                 }}
               >
                 <Plant
-                  plantType={appearance!.plantType}
+                  plantType={appearance.plantType}
                   expression={healthToExpression(health.healthStatus)}
                   size="sm"
                   animate={true}
@@ -130,7 +131,7 @@ export function NeedsLoveShelf() {
 
               {/* Name tag */}
               <div className="plant-name-tag">
-                {friend!.name.split(' ')[0]}
+                {friend.name.split(' ')[0]}
               </div>
 
               {/* Days indicator */}

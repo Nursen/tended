@@ -3,36 +3,13 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useFriendStore } from '../../core/stores/friendStore';
 import { getLastContactDescription } from '../../core/services/healthService';
 import { Plant, healthToExpression } from '../components/Plant';
-import type { Tier, InteractionType } from '../../core/models/types';
+import {
+  TIER_LABELS,
+  INTERACTION_LABELS,
+  INTERACTION_ICONS,
+  type InteractionType,
+} from '../../core/models/types';
 import './FriendDetailPage.css';
-
-const TIER_LABELS: Record<Tier, string> = {
-  1: 'Inner Circle',
-  2: 'Close Friends',
-  3: 'Good Friends',
-  4: 'Friends',
-  5: 'Acquaintances',
-};
-
-const INTERACTION_LABELS: Record<InteractionType, string> = {
-  text: 'Text',
-  call: 'Call',
-  hangout: 'Hangout',
-  event: 'Event',
-  deep_convo: 'Deep Convo',
-  helped: 'Helped',
-  group_hangout: 'Group Hangout',
-};
-
-const INTERACTION_EMOJIS: Record<InteractionType, string> = {
-  text: '💬',
-  call: '📞',
-  hangout: '🤝',
-  event: '🎉',
-  deep_convo: '💭',
-  helped: '🤲',
-  group_hangout: '👥',
-};
 
 export function FriendDetailPage() {
   const { friendId } = useParams<{ friendId: string }>();
@@ -113,7 +90,7 @@ export function FriendDetailPage() {
               className={`btn btn-secondary ${justLogged === type ? 'just-logged' : ''}`}
               onClick={() => handleQuickLog(type)}
             >
-              <span className="btn-emoji">{INTERACTION_EMOJIS[type]}</span>
+              <span className="btn-emoji">{INTERACTION_ICONS[type]}</span>
               {INTERACTION_LABELS[type]}
             </button>
           ))}
@@ -130,7 +107,7 @@ export function FriendDetailPage() {
                 className={`interaction-item ${index === 0 && justLogged ? 'animate-fade-in' : ''}`}
               >
                 <span className="interaction-emoji">
-                  {INTERACTION_EMOJIS[interaction.type]}
+                  {INTERACTION_ICONS[interaction.type]}
                 </span>
                 <span className="interaction-type">
                   {INTERACTION_LABELS[interaction.type]}
