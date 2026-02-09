@@ -46,12 +46,20 @@ export function PlantCloseup({ friendId }: PlantCloseupProps) {
 
   const expression = healthToExpression(health?.healthStatus || 'healthy');
 
+  const handleBackgroundClick = (e: React.MouseEvent) => {
+    // Only close if clicking directly on the background, not on children
+    if (e.target === e.currentTarget) {
+      closePlantCloseup();
+    }
+  };
+
   return (
     <motion.div
       className="plant-closeup"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
+      onClick={handleBackgroundClick}
     >
       {/* Close button */}
       <motion.button

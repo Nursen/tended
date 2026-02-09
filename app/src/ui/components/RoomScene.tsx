@@ -23,7 +23,6 @@ export function RoomScene() {
   const selectedFriendId = useUIStore((state) => state.selectedFriendId);
   const activePanel = useUIStore((state) => state.activePanel);
   const closePanel = useUIStore((state) => state.closePanel);
-  const closePlantCloseup = useUIStore((state) => state.closePlantCloseup);
 
   const getAllFriendsHealth = useFriendStore((state) => state.getAllFriendsHealth);
   const healthMetrics = getAllFriendsHealth();
@@ -69,7 +68,7 @@ export function RoomScene() {
           <div
             className="room-overlay-backdrop"
             onClick={() => {
-              if (selectedFriendId) closePlantCloseup();
+              // Only close panels here - PlantCloseup handles its own closing
               if (activePanel) closePanel();
             }}
           />
