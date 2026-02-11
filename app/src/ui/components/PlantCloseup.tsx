@@ -14,6 +14,7 @@ import {
   INTERACTION_LABELS,
   INTERACTION_ICONS,
   type InteractionType,
+  type HealthStatus,
 } from '../../core/models/types';
 import './PlantCloseup.css';
 
@@ -21,14 +22,66 @@ interface PlantCloseupProps {
   friendId: string;
 }
 
+/** Calculate days until the next occurrence of a birthday */
+function getDaysUntilBirthday(birthdayStr: string): number {
+  const now = new Date();
+  const [, month, day] = birthdayStr.split('-').map(Number);
+  const thisYear = now.getFullYear();
+  let next = new Date(thisYear, month - 1, day);
+  // Zero out time for clean day comparison
+  const today = new Date(thisYear, now.getMonth(), now.getDate());
+  if (next < today) {
+    next = new Date(thisYear + 1, month - 1, day);
+  }
+  return Math.ceil((next.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+}
+
+/** Format a birthday string for display */
+function formatBirthday(birthdayStr: string): string {
+  const [, month, day] = birthdayStr.split('-').map(Number);
+  const date = new Date(2000, month - 1, day); // year doesn't matter for display
+  return date.toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
+}
+
+/** Build reach-out prompts based on friend name and health status */
+function getReachOutPrompts(firstName: string, healthStatus: HealthStatus) {
+  const prompts: Array<{ label: string; message: string; description: string }> = [
+    {
+      label: 'Quick check-in',
+      message: `Hey ${firstName}! Just thinking about you. How's everything going?`,
+      description: 'Simple and warm',
+    },
+    {
+      label: 'Photo prompt',
+      message: `We should do this again soon!`,
+      description: `Dig up a photo with ${firstName} and send it`,
+    },
+  ];
+
+  // Low-pressure reconnect only for cooling/at_risk/dormant
+  const needsGentleTouch: HealthStatus[] = ['cooling', 'at_risk', 'dormant'];
+  if (needsGentleTouch.includes(healthStatus)) {
+    prompts.push({
+      label: 'Low-pressure reconnect',
+      message: `Hey ${firstName}, no need to reply right now \u2014 just wanted you to know I'm thinking of you.`,
+      description: "No pressure, just warmth",
+    });
+  }
+
+  return prompts;
+}
+
 export function PlantCloseup({ friendId }: PlantCloseupProps) {
   const [justLogged, setJustLogged] = useState<string | null>(null);
+  const [noteInput, setNoteInput] = useState('');
+  const [showReachOut, setShowReachOut] = useState(false);
 
   const getFriend = useFriendStore((state) => state.getFriend);
   const getPlantAppearance = useFriendStore((state) => state.getPlantAppearance);
   const getFriendHealth = useFriendStore((state) => state.getFriendHealth);
   const allInteractions = useFriendStore((state) => state.interactions);
   const logInteraction = useFriendStore((state) => state.logInteraction);
+  const updateFriend = useFriendStore((state) => state.updateFriend);
   const closePlantCloseup = useUIStore((state) => state.closePlantCloseup);
 
   const friend = getFriend(friendId);
@@ -47,7 +100,30 @@ export function PlantCloseup({ friendId }: PlantCloseupProps) {
     setTimeout(() => setJustLogged(null), 1500);
   };
 
+  const handleAddNote = () => {
+    const text = noteInput.trim();
+    if (!text) return;
+    const existingNotes = friend.profile?.rawNotes || [];
+    updateFriend(friend.id, {
+      profile: {
+        ...friend.profile,
+        rawNotes: [...existingNotes, text],
+      },
+    });
+    setNoteInput('');
+  };
+
+  const handleNoteKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleAddNote();
+    }
+  };
+
   const expression = healthToExpression(health?.healthStatus || 'healthy');
+  const healthStatus = health?.healthStatus || 'healthy';
+  const firstName = friend.name.split(' ')[0];
+  const reachOutPrompts = getReachOutPrompts(firstName, healthStatus);
 
   const handleBackgroundClick = (e: React.MouseEvent) => {
     // Only close if clicking directly on the background, not on children
@@ -94,7 +170,7 @@ export function PlantCloseup({ friendId }: PlantCloseupProps) {
         />
       </motion.div>
 
-      {/* Name card - top */}
+      {/* Name card - top (includes birthday) */}
       <motion.div
         className="info-card name-card"
         initial={{ opacity: 0, y: -20 }}
@@ -103,6 +179,18 @@ export function PlantCloseup({ friendId }: PlantCloseupProps) {
       >
         <h2 className="friend-name">{friend.name}</h2>
         <span className="tier-badge">{TIER_LABELS[friend.tier]}</span>
+        {friend.birthday && (
+          <div className="birthday-row">
+            <span className="birthday-icon">&#127874;</span>
+            <span className="birthday-text">
+              {formatBirthday(friend.birthday)}
+              {' \u2014 '}
+              {getDaysUntilBirthday(friend.birthday) === 0
+                ? 'Today!'
+                : `${getDaysUntilBirthday(friend.birthday)}d away`}
+            </span>
+          </div>
+        )}
       </motion.div>
 
       {/* Status card - left */}
@@ -152,6 +240,102 @@ export function PlantCloseup({ friendId }: PlantCloseupProps) {
           ))}
         </div>
         <p className="actions-hint">Tap to log an interaction</p>
+      </motion.div>
+
+      {/* Reach-out prompts - Friendship Action Engine V1 */}
+      <motion.div
+        className="info-card reachout-card"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.45 }}
+      >
+        {!showReachOut ? (
+          <motion.button
+            className="reachout-trigger"
+            onClick={() => setShowReachOut(true)}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            <span className="reachout-trigger-icon">&#128140;</span>
+            Reach Out to {firstName}
+          </motion.button>
+        ) : (
+          <>
+            <div className="reachout-header">Not sure what to say?</div>
+            <div className="reachout-subtext">
+              Tap a prompt to open your messages
+            </div>
+            <div className="reachout-prompts">
+              {reachOutPrompts.map((prompt) => (
+                <div key={prompt.label} className="reachout-prompt">
+                  <span className="reachout-prompt-label">{prompt.label}</span>
+                  <span className="reachout-prompt-desc">{prompt.description}</span>
+                  <span className="reachout-prompt-preview">&ldquo;{prompt.message}&rdquo;</span>
+                  <div className="reachout-channels">
+                    <a
+                      className="channel-btn channel-sms"
+                      href={`sms:?body=${encodeURIComponent(prompt.message)}`}
+                    >
+                      💬 Text
+                    </a>
+                    <a
+                      className="channel-btn channel-whatsapp"
+                      href={`https://wa.me/?text=${encodeURIComponent(prompt.message)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      📱 WhatsApp
+                    </a>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <button
+              className="reachout-dismiss"
+              onClick={() => setShowReachOut(false)}
+            >
+              Maybe later
+            </button>
+          </>
+        )}
+      </motion.div>
+
+      {/* Notes section */}
+      <motion.div
+        className="info-card notes-card"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.5 }}
+      >
+        <div className="notes-header">Notes</div>
+        {friend.profile?.rawNotes && friend.profile.rawNotes.length > 0 ? (
+          <ul className="notes-list">
+            {friend.profile.rawNotes.map((note, i) => (
+              <li key={i} className="notes-item">{note}</li>
+            ))}
+          </ul>
+        ) : (
+          <p className="notes-empty">No notes yet</p>
+        )}
+        <div className="notes-input-row">
+          <input
+            type="text"
+            className="notes-input"
+            placeholder="Add a note..."
+            value={noteInput}
+            onChange={(e) => setNoteInput(e.target.value)}
+            onKeyDown={handleNoteKeyDown}
+          />
+          <motion.button
+            className="notes-add-btn"
+            onClick={handleAddNote}
+            disabled={!noteInput.trim()}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            Add
+          </motion.button>
+        </div>
       </motion.div>
 
       {/* Recent history - right */}

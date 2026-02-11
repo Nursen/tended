@@ -21,17 +21,23 @@ const TIER_OPTIONS: { value: Tier; label: string; description: string }[] = [
 export function AddFriendPanel() {
   const [name, setName] = useState('');
   const [tier, setTier] = useState<Tier>(3);
+  const [birthday, setBirthday] = useState('');
 
   const addFriend = useFriendStore((state) => state.addFriend);
+  const updateFriend = useFriendStore((state) => state.updateFriend);
   const closePanel = useUIStore((state) => state.closePanel);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim()) return;
 
-    addFriend(name.trim(), tier);
+    const friend = addFriend(name.trim(), tier);
+    if (friend && birthday) {
+      updateFriend(friend.id, { birthday });
+    }
     setName('');
     setTier(3);
+    setBirthday('');
     closePanel();
   };
 
@@ -50,6 +56,17 @@ export function AddFriendPanel() {
             onChange={(e) => setName(e.target.value)}
             placeholder="Their name"
             autoFocus
+            className="text-input"
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="birthday">Birthday (optional)</label>
+          <input
+            id="birthday"
+            type="date"
+            value={birthday}
+            onChange={(e) => setBirthday(e.target.value)}
             className="text-input"
           />
         </div>
