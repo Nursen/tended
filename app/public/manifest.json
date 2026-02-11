@@ -1,0 +1,29 @@
+{
+  "name": "Tended",
+  "short_name": "Tended",
+  "description": "Tend your friendships like a garden",
+  "display": "standalone",
+  "start_url": "/",
+  "theme_color": "#7CAA6D",
+  "background_color": "#FFF8F0",
+  "icons": [
+    {
+      "src": "/icon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}

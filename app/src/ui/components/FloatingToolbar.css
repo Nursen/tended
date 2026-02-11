@@ -4,7 +4,7 @@
 
 .floating-toolbar {
   position: fixed;
-  bottom: var(--space-6);
+  bottom: calc(var(--space-6) + env(safe-area-inset-bottom, 0px));
   left: 50%;
   transform: translateX(-50%);
   z-index: 5;
@@ -27,7 +27,8 @@
   display: flex;
   align-items: center;
   gap: var(--space-2);
-  padding: var(--space-2) var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  min-height: 44px;
   border: none;
   border-radius: var(--radius-md);
   background: transparent;
@@ -89,7 +90,9 @@
 
 /* Icon-only button */
 .icon-btn {
-  padding: var(--space-2);
+  padding: var(--space-3);
+  min-width: 44px;
+  min-height: 44px;
   color: var(--color-text-secondary);
 }
 

@@ -218,3 +218,54 @@
 .onboarding-skip:hover {
   color: var(--color-text-secondary);
 }
+
+/* Mobile */
+@media (max-width: 480px) {
+  .onboarding {
+    padding: var(--space-4);
+  }
+
+  .onboarding-card {
+    padding: var(--space-5);
+  }
+
+  .onboarding-title {
+    font-size: var(--text-xl);
+  }
+
+  .onboarding-add-form {
+    flex-direction: column;
+  }
+
+  .onboarding-tier-row {
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+
+  .onboarding-tier-select {
+    min-height: 44px;
+    padding: var(--space-3) var(--space-4);
+    font-size: var(--text-base);
+  }
+
+  .onboarding-name-input {
+    min-height: 44px;
+    /* Prevent iOS zoom */
+    font-size: 16px;
+  }
+
+  .onboarding-add-btn {
+    min-height: 44px;
+    padding: var(--space-3) var(--space-6);
+  }
+
+  .onboarding-cta {
+    min-height: 44px;
+    width: 100%;
+  }
+
+  .onboarding-skip {
+    min-height: 44px;
+    padding: var(--space-3);
+  }
+}

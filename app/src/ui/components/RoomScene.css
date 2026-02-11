@@ -83,3 +83,33 @@
     display: none;
   }
 }
+
+/* Mobile: full-width shelves, hide bulletin board */
+@media (max-width: 768px) {
+  .room-content {
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+    padding: var(--space-3);
+    padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .room-left {
+    order: 2;
+    flex-direction: column;
+    padding-top: 0;
+  }
+
+  /* Hide bulletin board on mobile -- it's decorative, not core */
+  .room-left .bulletin-board {
+    display: none;
+  }
+
+  .room-center {
+    order: 1;
+    padding-top: var(--space-2);
+  }
+
+  .room-right {
+    display: none;
+  }
+}

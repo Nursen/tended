@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="96" fill="#FFF8F0"/>
+  <!-- Pot -->
+  <path d="M176 340 h160 l-20 100 h-120 z" fill="#D4896A"/>
+  <rect x="166" y="320" width="180" height="30" rx="6" fill="#D4896A"/>
+  <!-- Soil -->
+  <ellipse cx="256" cy="330" rx="70" ry="10" fill="#8B6914"/>
+  <!-- Stem -->
+  <path d="M256 330 Q256 260 256 220" stroke="#7CAA6D" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <!-- Left leaf -->
+  <path d="M256 280 Q220 240 200 200 Q230 220 256 260" fill="#7CAA6D"/>
+  <!-- Right leaf -->
+  <path d="M256 260 Q290 220 310 180 Q280 200 256 240" fill="#8BB87A"/>
+  <!-- Top leaf -->
+  <path d="M256 220 Q240 170 230 140 Q260 170 270 200 Q280 170 290 140 Q270 170 256 220" fill="#7CAA6D"/>
+  <!-- Small heart -->
+  <path d="M300 160 C300 150 312 145 312 155 C312 165 300 175 300 175 C300 175 288 165 288 155 C288 145 300 150 300 160" fill="#F7A8B8"/>
+</svg>

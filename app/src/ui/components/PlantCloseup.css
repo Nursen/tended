@@ -212,26 +212,68 @@
 
 /* Responsive - stack cards on mobile */
 @media (max-width: 900px) {
-  .closeup-plant {
-    transform: scale(1.5);
-    margin-top: -60px;
+  /* Switch from absolute-positioned cards to a scrollable column layout */
+  .plant-closeup {
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: var(--space-6) var(--space-4);
+    padding-bottom: calc(var(--space-8) + env(safe-area-inset-bottom, 0px));
+    gap: var(--space-4);
+  }
+
+  .closeup-close {
+    position: fixed;
+    top: var(--space-4);
+    right: var(--space-4);
+    z-index: 20;
+  }
+
+  /* Cards become static in the flow instead of absolutely positioned */
+  .info-card {
+    position: static;
+    transform: none;
+    width: 100%;
+    max-width: 340px;
   }
 
   .name-card {
-    top: 8%;
+    top: auto;
+    left: auto;
+    transform: none;
+    order: 1;
   }
 
-  .status-card,
+  .closeup-plant {
+    transform: scale(1.5);
+    order: 2;
+    margin: var(--space-4) 0;
+  }
+
+  .status-card {
+    display: none;
+  }
+
   .history-card {
     display: none;
   }
 
   .actions-card {
-    bottom: 12%;
+    bottom: auto;
+    left: auto;
+    transform: none;
+    order: 3;
   }
 }
 
 @media (max-width: 600px) {
+  .plant-closeup {
+    padding: var(--space-4) var(--space-3);
+    padding-bottom: calc(var(--space-6) + env(safe-area-inset-bottom, 0px));
+  }
+
   .closeup-plant {
     transform: scale(1.3);
   }
@@ -243,5 +285,22 @@
 
   .action-icon {
     font-size: 1.25rem;
+  }
+
+  .friend-name {
+    font-size: var(--text-xl);
+  }
+}
+
+/* Very short phones like iPhone SE (568px tall) */
+@media (max-height: 600px) and (max-width: 900px) {
+  .closeup-plant {
+    transform: scale(1);
+    margin: var(--space-2) 0;
+  }
+
+  .plant-closeup {
+    padding-top: var(--space-4);
+    gap: var(--space-3);
   }
 }

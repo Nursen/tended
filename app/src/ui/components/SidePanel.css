@@ -68,4 +68,13 @@
     width: 100%;
     max-width: 100%;
   }
+
+  .panel-content {
+    padding-bottom: calc(var(--space-6) + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+.panel-close {
+  min-width: 44px;
+  min-height: 44px;
 }

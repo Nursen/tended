@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192">
+  <rect width="192" height="192" rx="36" fill="#FFF8F0"/>
+  <!-- Pot -->
+  <path d="M66 128 h60 l-8 38 h-44 z" fill="#D4896A"/>
+  <rect x="62" y="120" width="68" height="12" rx="3" fill="#D4896A"/>
+  <!-- Stem -->
+  <path d="M96 124 Q96 98 96 82" stroke="#7CAA6D" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <!-- Left leaf -->
+  <path d="M96 105 Q82 90 75 75 Q86 83 96 100" fill="#7CAA6D"/>
+  <!-- Right leaf -->
+  <path d="M96 98 Q110 83 117 68 Q106 76 96 93" fill="#8BB87A"/>
+  <!-- Top leaf -->
+  <path d="M96 82 Q90 64 86 52 Q98 64 102 76 Q106 64 110 52 Q102 64 96 82" fill="#7CAA6D"/>
+  <!-- Heart -->
+  <path d="M113 60 C113 56 119 54 119 58 C119 62 113 66 113 66 C113 66 107 62 107 58 C107 54 113 56 113 60" fill="#F7A8B8"/>
+</svg>
