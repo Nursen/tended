@@ -126,6 +126,7 @@ html {
 }
 
 body {
+  margin: 0;
   font-family: var(--font-body);
   font-size: var(--text-base);
   line-height: var(--leading-normal);
