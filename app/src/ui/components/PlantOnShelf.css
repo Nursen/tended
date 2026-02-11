@@ -27,11 +27,12 @@
 }
 
 .plant-on-shelf .plant-visual {
-  width: 90px;
-  height: 120px;
+  width: 100px;
+  height: 140px;
   display: flex;
   align-items: flex-end;
   justify-content: center;
+  overflow: visible;
 }
 
 .plant-on-shelf .plant-info {

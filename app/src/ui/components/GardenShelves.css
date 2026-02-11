@@ -60,16 +60,17 @@
 .shelf {
   flex: 1;
   position: relative;
+  overflow: visible;
 }
 
 .plants-on-shelf {
   display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
   gap: var(--space-4);
   padding: 0 var(--space-4);
   padding-bottom: var(--space-2);
-  overflow-x: auto;
-  scrollbar-width: thin;
-  scrollbar-color: var(--color-secondary) transparent;
+  overflow: visible;
 }
 
 .plants-on-shelf::-webkit-scrollbar {

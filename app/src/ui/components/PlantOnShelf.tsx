@@ -45,7 +45,7 @@ export function PlantOnShelf({ friend, health }: PlantOnShelfProps) {
         <Plant
           plantType={plantAppearance?.plantType || 'monstera'}
           expression={expression}
-          size="md"
+          size="sm"
           animate={true}
         />
       </div>
