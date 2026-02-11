@@ -101,10 +101,13 @@
 }
 
 /* Responsive */
-@media (max-width: 600px) {
+@media (max-width: 768px) {
   .floating-toolbar {
-    width: calc(100% - var(--space-8));
-    justify-content: space-between;
+    left: var(--space-4);
+    right: var(--space-4);
+    transform: none;
+    width: auto;
+    justify-content: space-around;
   }
 
   .add-btn .btn-label,
@@ -114,5 +117,9 @@
 
   .garden-btn {
     min-width: auto;
+  }
+
+  .toolbar-btn {
+    padding: var(--space-2) var(--space-3);
   }
 }
