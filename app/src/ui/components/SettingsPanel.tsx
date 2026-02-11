@@ -5,6 +5,7 @@
 import { motion } from 'framer-motion';
 import { useFriendStore } from '../../core/stores/friendStore';
 import { useUIStore } from '../../core/stores/uiStore';
+import { useAuth } from '../../core/services/auth';
 import './SettingsPanel.css';
 
 export function SettingsPanel() {
@@ -12,6 +13,7 @@ export function SettingsPanel() {
   const loadDemoData = useFriendStore((state) => state.loadDemoData);
   const clearAllData = useFriendStore((state) => state.clearAllData);
   const closePanel = useUIStore((state) => state.closePanel);
+  const { user, signOut } = useAuth();
 
   const handleLoadDemo = () => {
     loadDemoData();
@@ -24,9 +26,37 @@ export function SettingsPanel() {
     }
   };
 
+  const handleSignOut = async () => {
+    await signOut();
+    closePanel();
+  };
+
   return (
     <div className="settings-panel">
       <h2 className="panel-heading">Settings</h2>
+
+      {/* Account section */}
+      {user && (
+        <section className="settings-section">
+          <h3 className="section-title">Account</h3>
+          <div className="garden-info-card">
+            <span className="garden-icon-large">👤</span>
+            <span className="garden-name-large">{user.email}</span>
+          </div>
+          <motion.button
+            className="action-item"
+            onClick={handleSignOut}
+            whileHover={{ x: 4 }}
+            style={{ marginTop: 'var(--space-2)' }}
+          >
+            <span className="action-icon">🚪</span>
+            <span className="action-text">
+              <span className="action-label">Sign Out</span>
+              <span className="action-desc">Log out of your account</span>
+            </span>
+          </motion.button>
+        </section>
+      )}
 
       {/* Current Garden Info */}
       <section className="settings-section">

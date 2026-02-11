@@ -1,0 +1,162 @@
+/**
+ * AuthScreen — login/signup screen
+ * Matches Tended's cozy, warm aesthetic
+ */
+
+.auth-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: var(--space-6);
+  background: var(--color-background);
+}
+
+.auth-brand {
+  text-align: center;
+  margin-bottom: var(--space-8);
+}
+
+.auth-brand-icon {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: var(--space-2);
+}
+
+.auth-brand-name {
+  font-family: var(--font-display);
+  font-size: var(--text-3xl);
+  font-weight: var(--font-bold);
+  color: var(--color-primary);
+  letter-spacing: -0.02em;
+}
+
+.auth-brand-tagline {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  margin-top: var(--space-1);
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 380px;
+  background: var(--color-surface);
+  border-radius: var(--radius-xl);
+  padding: var(--space-8);
+  box-shadow: var(--shadow-lg);
+}
+
+.auth-title {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: var(--font-semibold);
+  text-align: center;
+  margin-bottom: var(--space-6);
+  color: var(--color-text-primary);
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.auth-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.auth-label {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  color: var(--color-text-secondary);
+}
+
+.auth-input {
+  padding: var(--space-3) var(--space-4);
+  border: 2px solid rgba(44, 62, 42, 0.12);
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  color: var(--color-text-primary);
+  background: var(--color-surface-warm);
+  transition: border-color var(--duration-fast) var(--ease-out);
+  outline: none;
+}
+
+.auth-input:focus {
+  border-color: var(--color-primary);
+}
+
+.auth-input::placeholder {
+  color: var(--color-text-muted);
+}
+
+.auth-submit {
+  margin-top: var(--space-2);
+  padding: var(--space-3) var(--space-5);
+  background: var(--color-primary);
+  color: white;
+  font-family: var(--font-display);
+  font-size: var(--text-base);
+  font-weight: var(--font-semibold);
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.auth-submit:hover:not(:disabled) {
+  background: #6B9A5E;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(124, 170, 109, 0.3);
+}
+
+.auth-submit:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.auth-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.auth-error {
+  background: rgba(212, 137, 106, 0.15);
+  color: var(--color-secondary);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  text-align: center;
+}
+
+.auth-toggle {
+  text-align: center;
+  margin-top: var(--space-6);
+}
+
+.auth-toggle-text {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+.auth-toggle-link {
+  background: none;
+  border: none;
+  color: var(--color-primary);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  cursor: pointer;
+  padding: 0;
+  margin-left: var(--space-1);
+}
+
+.auth-toggle-link:hover {
+  color: #6B9A5E;
+  text-decoration: underline;
+}

@@ -33,6 +33,7 @@
   padding: var(--space-3) var(--space-4);
   font-family: var(--font-body);
   font-size: var(--text-base);
+  color: var(--color-text-primary);
   border: 2px solid rgba(44, 62, 42, 0.1);
   border-radius: var(--radius-md);
   background: white;

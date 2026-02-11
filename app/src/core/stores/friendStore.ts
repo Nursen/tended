@@ -1,6 +1,11 @@
 /**
  * Zustand store for friends and interactions
  * This is the central state management for Tended
+ *
+ * Supabase sync strategy:
+ * - On auth, syncFromSupabase() loads all data from the server
+ * - On mutations, we update Supabase first then update local state
+ * - localStorage persist middleware stays as offline fallback
  */
 
 import { create } from 'zustand';
@@ -21,9 +26,25 @@ import type {
 } from '../models/types';
 import { TIER_PLANT_OPTIONS } from '../models/types';
 import { getFriendHealth } from '../services/healthService';
+import * as db from '../services/supabaseDataService';
+import { isSupabaseConfigured } from '../services/supabase';
+import { useUIStore } from './uiStore';
 
 // Generate unique IDs
 const generateId = () => crypto.randomUUID();
+
+// Get the current user ID from Supabase auth (or null if not logged in)
+import { supabase } from '../services/supabase';
+const getCurrentUserId = async (): Promise<string | null> => {
+  if (!supabase) return null;
+  const { data } = await supabase.auth.getSession();
+  return data.session?.user?.id ?? null;
+};
+
+// Fire-and-forget Supabase write — logs errors but doesn't block the UI
+const syncWrite = (fn: () => Promise<unknown>) => {
+  fn().catch((err) => console.error('[Supabase sync]', err));
+};
 
 // Get a random plant type for a tier
 const getRandomPlantForTier = (tier: Tier): PlantType => {
@@ -50,6 +71,11 @@ interface FriendStore {
   friends: Friend[];
   interactions: Interaction[];
   plantAppearances: Record<string, PlantAppearance>;
+
+  // Sync state
+  isLoading: boolean;
+  error: string | null;
+  syncFromSupabase: (userId: string) => Promise<void>;
 
   // Garden CRUD
   createGarden: (name: string, icon?: string, description?: string) => Garden;
@@ -109,6 +135,42 @@ export const useFriendStore = create<FriendStore>()(
       friends: [],
       interactions: [],
       plantAppearances: {},
+      isLoading: false,
+      error: null,
+
+      // ─────────────────────────────────────────────────────────────
+      // SUPABASE SYNC
+      // ─────────────────────────────────────────────────────────────
+
+      syncFromSupabase: async (userId: string) => {
+        if (!isSupabaseConfigured()) return;
+
+        set({ isLoading: true, error: null });
+        try {
+          const [gardens, friends, interactions, plantAppearances] =
+            await Promise.all([
+              db.fetchGardens(userId),
+              db.fetchFriends(userId),
+              db.fetchInteractions(userId),
+              db.fetchPlantAppearances(userId),
+            ]);
+
+          set({
+            gardens,
+            friends,
+            interactions,
+            plantAppearances,
+            currentGardenId: gardens[0]?.id || null,
+            isLoading: false,
+          });
+        } catch (err) {
+          console.error('Failed to sync from Supabase:', err);
+          set({
+            isLoading: false,
+            error: err instanceof Error ? err.message : 'Sync failed',
+          });
+        }
+      },
 
       // ─────────────────────────────────────────────────────────────
       // GARDEN CRUD
@@ -128,6 +190,23 @@ export const useFriendStore = create<FriendStore>()(
           currentGardenId: state.currentGardenId || garden.id,
         }));
 
+        // Sync to Supabase — create with server-generated ID then update local
+        syncWrite(async () => {
+          const userId = await getCurrentUserId();
+          if (!userId) return;
+          const remote = await db.createGarden(userId, { name, icon, description });
+          // Replace the local garden with the one from Supabase (has server ID)
+          set((state) => ({
+            gardens: state.gardens.map((g) => (g.id === garden.id ? remote : g)),
+            currentGardenId:
+              state.currentGardenId === garden.id ? remote.id : state.currentGardenId,
+            // Update any friends that point to the old garden ID
+            friends: state.friends.map((f) =>
+              f.gardenId === garden.id ? { ...f, gardenId: remote.id } : f
+            ),
+          }));
+        });
+
         return garden;
       },
 
@@ -137,6 +216,8 @@ export const useFriendStore = create<FriendStore>()(
             g.id === id ? { ...g, ...updates } : g
           ),
         }));
+
+        syncWrite(() => db.updateGarden(id, updates));
       },
 
       deleteGarden: (id) => {
@@ -156,6 +237,9 @@ export const useFriendStore = create<FriendStore>()(
             return friend?.gardenId !== id;
           }),
         }));
+
+        // CASCADE on the server handles friends/interactions/appearances
+        syncWrite(() => db.deleteGarden(id));
       },
 
       switchGarden: (gardenId) => {
@@ -205,6 +289,43 @@ export const useFriendStore = create<FriendStore>()(
           },
         }));
 
+        // Sync to Supabase — replace local placeholder IDs with server IDs
+        syncWrite(async () => {
+          const userId = await getCurrentUserId();
+          if (!userId) return;
+          const remote = await db.addFriend(userId, {
+            gardenId: currentGardenId,
+            name,
+            tier,
+            roles,
+          });
+          await db.upsertPlantAppearance(userId, remote.id, {
+            plantType: plantAppearance.plantType,
+            potStyle: plantAppearance.potStyle,
+            potColor: plantAppearance.potColor,
+          });
+          // Swap local IDs with server IDs
+          set((state) => {
+            const { [id]: oldPA, ...restPA } = state.plantAppearances;
+            // Also update UI store if this friend is currently selected
+            const uiState = useUIStore.getState();
+            if (uiState.selectedFriendId === id) {
+              useUIStore.setState({ selectedFriendId: remote.id });
+            }
+            return {
+              friends: state.friends.map((f) =>
+                f.id === id ? { ...remote, gardenId: remote.gardenId } : f
+              ),
+              interactions: state.interactions.map((i) =>
+                i.friendId === id ? { ...i, friendId: remote.id } : i
+              ),
+              plantAppearances: oldPA
+                ? { ...restPA, [remote.id]: { ...oldPA, friendId: remote.id } }
+                : restPA,
+            };
+          });
+        });
+
         return friend;
       },
 
@@ -216,6 +337,27 @@ export const useFriendStore = create<FriendStore>()(
               : f
           ),
         }));
+
+        // Map app-level Friend fields to DB column names
+        syncWrite(() => {
+          const dbUpdates: Record<string, unknown> = {};
+          if (updates.name !== undefined) dbUpdates.name = updates.name;
+          if (updates.tier !== undefined) dbUpdates.tier = updates.tier;
+          if (updates.roles !== undefined) dbUpdates.roles = updates.roles;
+          if (updates.photo !== undefined) dbUpdates.photo = updates.photo;
+          if (updates.birthday !== undefined) dbUpdates.birthday = updates.birthday;
+          if (updates.location !== undefined) {
+            dbUpdates.location_city = updates.location?.city;
+            dbUpdates.location_region = updates.location?.region;
+          }
+          if (updates.importantDates !== undefined) dbUpdates.important_dates = updates.importantDates;
+          if (updates.profile !== undefined) dbUpdates.profile_data = updates.profile;
+          if (updates.tierHistory !== undefined) dbUpdates.tier_history = updates.tierHistory;
+          if (Object.keys(dbUpdates).length > 0) {
+            return db.updateFriend(id, dbUpdates);
+          }
+          return Promise.resolve();
+        });
       },
 
       removeFriend: (id) => {
@@ -227,6 +369,9 @@ export const useFriendStore = create<FriendStore>()(
             plantAppearances: remainingAppearances,
           };
         });
+
+        // CASCADE on the server handles interactions + plant_appearances
+        syncWrite(() => db.removeFriend(id));
       },
 
       getFriend: (id) => {
@@ -242,6 +387,7 @@ export const useFriendStore = create<FriendStore>()(
         if (!friend || friend.tier === newTier) return;
 
         const now = new Date().toISOString();
+        const newHistory = [...friend.tierHistory, { tier: newTier, date: now, reason }];
 
         // Update tier and add to history
         set((state) => ({
@@ -250,7 +396,7 @@ export const useFriendStore = create<FriendStore>()(
               ? {
                   ...f,
                   tier: newTier,
-                  tierHistory: [...f.tierHistory, { tier: newTier, date: now, reason }],
+                  tierHistory: newHistory,
                   updatedAt: now,
                 }
               : f
@@ -259,21 +405,40 @@ export const useFriendStore = create<FriendStore>()(
 
         // Update plant type to match new tier
         const currentAppearance = get().plantAppearances[friendId];
+        let newPlantType: PlantType | null = null;
         if (currentAppearance) {
           const tierPlants = TIER_PLANT_OPTIONS[newTier];
           // Only change plant if current plant doesn't belong to new tier
           if (!tierPlants.includes(currentAppearance.plantType)) {
+            newPlantType = getRandomPlantForTier(newTier);
             set((state) => ({
               plantAppearances: {
                 ...state.plantAppearances,
                 [friendId]: {
                   ...currentAppearance,
-                  plantType: getRandomPlantForTier(newTier),
+                  plantType: newPlantType!,
                 },
               },
             }));
           }
         }
+
+        syncWrite(async () => {
+          await db.updateFriend(friendId, {
+            tier: newTier,
+            tier_history: newHistory,
+          });
+          if (newPlantType && currentAppearance) {
+            const userId = await getCurrentUserId();
+            if (userId) {
+              await db.upsertPlantAppearance(userId, friendId, {
+                plantType: newPlantType,
+                potStyle: currentAppearance.potStyle,
+                potColor: currentAppearance.potColor,
+              });
+            }
+          }
+        });
       },
 
       // ─────────────────────────────────────────────────────────────
@@ -281,11 +446,13 @@ export const useFriendStore = create<FriendStore>()(
       // ─────────────────────────────────────────────────────────────
 
       logInteraction: (friendId, type, note, initiatedBy, date) => {
+        const localId = generateId();
+        const dateStr = (date || new Date()).toISOString();
         const interaction: Interaction = {
-          id: generateId(),
+          id: localId,
           friendId,
           type,
-          date: (date || new Date()).toISOString(),
+          date: dateStr,
           note,
           initiatedBy,
         };
@@ -296,6 +463,25 @@ export const useFriendStore = create<FriendStore>()(
 
         // Update friend's updatedAt
         get().updateFriend(friendId, {});
+
+        // Sync to Supabase
+        syncWrite(async () => {
+          const userId = await getCurrentUserId();
+          if (!userId) return;
+          const remote = await db.logInteraction(userId, {
+            friendId,
+            type,
+            date: dateStr,
+            note,
+            initiatedBy,
+          });
+          // Swap local ID with server ID
+          set((state) => ({
+            interactions: state.interactions.map((i) =>
+              i.id === localId ? remote : i
+            ),
+          }));
+        });
 
         return interaction;
       },
@@ -318,6 +504,8 @@ export const useFriendStore = create<FriendStore>()(
         set((state) => ({
           interactions: state.interactions.filter((i) => i.id !== interactionId),
         }));
+
+        syncWrite(() => db.deleteInteraction(interactionId));
       },
 
       // ─────────────────────────────────────────────────────────────
@@ -429,12 +617,24 @@ export const useFriendStore = create<FriendStore>()(
         const current = get().plantAppearances[friendId];
         if (!current) return;
 
+        const merged = { ...current, ...updates };
+
         set((state) => ({
           plantAppearances: {
             ...state.plantAppearances,
-            [friendId]: { ...current, ...updates },
+            [friendId]: merged,
           },
         }));
+
+        syncWrite(async () => {
+          const userId = await getCurrentUserId();
+          if (!userId) return;
+          await db.upsertPlantAppearance(userId, friendId, {
+            plantType: merged.plantType,
+            potStyle: merged.potStyle,
+            potColor: merged.potColor,
+          });
+        });
       },
 
       // ─────────────────────────────────────────────────────────────
