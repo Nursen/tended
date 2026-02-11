@@ -2,9 +2,11 @@ import { useEffect, useState } from 'react';
 import { RoomScene } from './ui/components/RoomScene';
 import { AuthScreen } from './ui/components/AuthScreen';
 import { OnboardingFlow } from './ui/components/OnboardingFlow';
+import { InstallPrompt } from './ui/components/InstallPrompt';
 import { AuthProvider, useAuth } from './core/services/auth';
 import { isSupabaseConfigured } from './core/services/supabase';
 import { useFriendStore } from './core/stores/friendStore';
+import { useInstallPrompt } from './ui/hooks/useInstallPrompt';
 import './ui/styles/tokens.css';
 
 function AppContent() {
@@ -13,6 +15,9 @@ function AppContent() {
   const isLoading = useFriendStore((s) => s.isLoading);
   const syncFromSupabase = useFriendStore((s) => s.syncFromSupabase);
   const [onboardingComplete, setOnboardingComplete] = useState(false);
+  const [installPromptDone, setInstallPromptDone] = useState(false);
+
+  const install = useInstallPrompt();
 
   // Sync data from Supabase when user logs in
   useEffect(() => {
@@ -23,7 +28,7 @@ function AppContent() {
 
   // If Supabase is not configured, skip auth — run in local-only mode
   if (!isSupabaseConfigured()) {
-    return <RoomScene />;
+    return <RoomScene install={install} />;
   }
 
   // Auth loading state
@@ -56,8 +61,18 @@ function AppContent() {
     return <OnboardingFlow onComplete={() => setOnboardingComplete(true)} />;
   }
 
+  // After onboarding: show install prompt once (skip if already installed or already shown)
+  if (onboardingComplete && !installPromptDone && !install.wasPromptShown && !install.isStandalone) {
+    return (
+      <InstallPrompt
+        install={install}
+        onContinue={() => setInstallPromptDone(true)}
+      />
+    );
+  }
+
   // Main app
-  return <RoomScene />;
+  return <RoomScene install={install} />;
 }
 
 function App() {

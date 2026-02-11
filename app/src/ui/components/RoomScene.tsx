@@ -17,9 +17,15 @@ import { PlantCloseup } from './PlantCloseup';
 import { AddFriendPanel } from './AddFriendPanel';
 import { GardenSwitcherPanel } from './GardenSwitcherPanel';
 import { SettingsPanel } from './SettingsPanel';
+import { InstallBanner } from './InstallBanner';
+import type { InstallPromptState } from '../hooks/useInstallPrompt';
 import './RoomScene.css';
 
-export function RoomScene() {
+interface RoomSceneProps {
+  install: InstallPromptState;
+}
+
+export function RoomScene({ install }: RoomSceneProps) {
   const selectedFriendId = useUIStore((state) => state.selectedFriendId);
   const activePanel = useUIStore((state) => state.activePanel);
   const closePanel = useUIStore((state) => state.closePanel);
@@ -36,6 +42,9 @@ export function RoomScene() {
 
   return (
     <div className="room-scene">
+      {/* Install banner — thin, dismissible, only for non-installed users */}
+      <InstallBanner install={install} />
+
       {/* Background layer - always visible */}
       <CozyBackground />
 
