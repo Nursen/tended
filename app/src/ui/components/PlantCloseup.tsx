@@ -24,17 +24,20 @@ interface PlantCloseupProps {
 export function PlantCloseup({ friendId }: PlantCloseupProps) {
   const [justLogged, setJustLogged] = useState<string | null>(null);
 
-  const friend = useFriendStore((state) => state.getFriend(friendId));
-  const plantAppearance = useFriendStore((state) => state.getPlantAppearance(friendId));
-  const health = useFriendStore((state) => state.getFriendHealth(friendId));
-  const interactions = useFriendStore((state) =>
-    state.interactions
-      .filter((i) => i.friendId === friendId)
-      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-      .slice(0, 5)
-  );
+  const getFriend = useFriendStore((state) => state.getFriend);
+  const getPlantAppearance = useFriendStore((state) => state.getPlantAppearance);
+  const getFriendHealth = useFriendStore((state) => state.getFriendHealth);
+  const allInteractions = useFriendStore((state) => state.interactions);
   const logInteraction = useFriendStore((state) => state.logInteraction);
   const closePlantCloseup = useUIStore((state) => state.closePlantCloseup);
+
+  const friend = getFriend(friendId);
+  const plantAppearance = getPlantAppearance(friendId);
+  const health = getFriendHealth(friendId);
+  const interactions = allInteractions
+    .filter((i) => i.friendId === friendId)
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    .slice(0, 5);
 
   if (!friend) return null;
 

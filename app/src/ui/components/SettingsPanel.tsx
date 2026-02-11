@@ -9,8 +9,10 @@ import { useAuth } from '../../core/services/auth';
 import './SettingsPanel.css';
 
 export function SettingsPanel() {
-  const currentGarden = useFriendStore((state) => state.getCurrentGarden());
+  const getCurrentGarden = useFriendStore((state) => state.getCurrentGarden);
   const loadDemoData = useFriendStore((state) => state.loadDemoData);
+
+  const currentGarden = getCurrentGarden();
   const clearAllData = useFriendStore((state) => state.clearAllData);
   const closePanel = useUIStore((state) => state.closePanel);
   const { user, signOut } = useAuth();

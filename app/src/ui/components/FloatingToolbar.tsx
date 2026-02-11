@@ -9,8 +9,10 @@ import { useUIStore } from '../../core/stores/uiStore';
 import './FloatingToolbar.css';
 
 export function FloatingToolbar() {
-  const currentGarden = useFriendStore((state) => state.getCurrentGarden());
+  const getCurrentGarden = useFriendStore((state) => state.getCurrentGarden);
   const openPanel = useUIStore((state) => state.openPanel);
+
+  const currentGarden = getCurrentGarden();
 
   return (
     <motion.div

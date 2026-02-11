@@ -22,11 +22,12 @@ const TIER_PLANT_LABELS: Record<Tier, string> = {
 export function GardenShelves() {
   const getCurrentGardenFriends = useFriendStore((state) => state.getCurrentGardenFriends);
   const getAllFriendsHealth = useFriendStore((state) => state.getAllFriendsHealth);
-  const currentGarden = useFriendStore((state) => state.getCurrentGarden());
+  const getCurrentGarden = useFriendStore((state) => state.getCurrentGarden);
   const openPanel = useUIStore((state) => state.openPanel);
 
   const friends = getCurrentGardenFriends();
   const healthMetrics = getAllFriendsHealth();
+  const currentGarden = getCurrentGarden();
 
   // Exclude plants that are in the "needs love" shelf
   const needsLoveIds = new Set(

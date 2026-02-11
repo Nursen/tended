@@ -26,8 +26,10 @@ const STATUS_COLORS: Record<HealthStatus, string> = {
 
 export function PlantOnShelf({ friend, health }: PlantOnShelfProps) {
   const status = health?.healthStatus || 'healthy';
-  const plantAppearance = useFriendStore((state) => state.getPlantAppearance(friend.id));
+  const getPlantAppearance = useFriendStore((state) => state.getPlantAppearance);
   const openPlantCloseup = useUIStore((state) => state.openPlantCloseup);
+
+  const plantAppearance = getPlantAppearance(friend.id);
 
   const expression = healthToExpression(status);
 
